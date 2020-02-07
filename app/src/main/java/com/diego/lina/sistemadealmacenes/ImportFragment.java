@@ -514,7 +514,7 @@ public class ImportFragment extends Fragment{
 
     private boolean validar_desc_merca(String desc_mercas) {
         String desc_mercas2 = desc_mercas;
-        Pattern patron = Pattern.compile("^[a-zA-ZÁáÀàÉéÈèÍíÌìÓóÒòÚúÙùÑñüÜ00-9ñN !@#\\$%\\^&\\*\\?_~\\(\\)\\.\\/]+$");
+        Pattern patron = Pattern.compile("^[a-zA-ZÁáÀàÉéÈèÍíÌìÓóÒòÚúÙùÑñüÜ00-9ñN !@#\\$%\\^&\\*\\?_~\\(\\)\\.\\^'\"\\/]+$");
         if (!patron.matcher(desc_mercas2).matches() || desc_mercas2.length()>160 || desc_mercas2.length() == 0) {
 
             return false;
