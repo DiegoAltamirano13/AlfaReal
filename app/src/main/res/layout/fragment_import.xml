@@ -319,8 +319,7 @@
             android:id="@+id/observaciones"
             android:hint="Observaciones"
             android:layout_gravity="center"
-            android:layout_margin="16dp"
-            android:focusable="false"/>
+            android:layout_margin="16dp" />
     </android.support.design.widget.TextInputLayout>
     <ImageView
         android:id="@+id/imagen_firma"

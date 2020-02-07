@@ -547,7 +547,6 @@ public class ImportFragment extends Fragment{
         final String identificacions = identificacion.getText().toString();
         final String mercancias= mercancia.getText().toString();
         final String cantidads = cantidad.getText().toString();
-        final String observacioness = observaciones.getText().toString();
 
         if (nombre_clientes.length() == 0  || estatuss.length() == 0 || plazas.length() == 0  || lineatranss.length() == 0 || placass.length() == 0  || conductors.length() == 0 || identificacions.length() == 0  || mercancias.length() == 0  || cantidads.length() == 0){
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext());
@@ -566,7 +565,9 @@ public class ImportFragment extends Fragment{
                 public void onResponse(String response) {
                     //envioCorreo();
                     if (response.trim().equalsIgnoreCase("registra")) {
-
+                        Toast.makeText(getContext(), "REGISTRO EXITOSO", Toast.LENGTH_SHORT).show();
+                        //progress.hide();
+                        limpiarTodo();
                     } else {
                         Toast.makeText(getContext(), "NO SE LLEVO ACABO EL REGISTRO", Toast.LENGTH_SHORT).show();
                         progress.hide();
@@ -602,7 +603,8 @@ public class ImportFragment extends Fragment{
                      String id_ch = identificacion.getText().toString();
                      String cantidads = cantidad.getText().toString();
                      String mercancias= mercancia.getText().toString();
-                     String fecha_ctl = fec_ini.getText().toString()+" "+spinner_fecha.getSelectedItem().toString();
+                     String fecha_ctl = fec_ini.getText().toString();
+                     String hora_ctl = spinner_fecha.getSelectedItem().toString();
                      String observacion = observaciones.getText().toString();
                      String transportista = lineatrans.getText().toString();
                      String placas2T = placas2.getText().toString();
@@ -622,9 +624,10 @@ public class ImportFragment extends Fragment{
                     parametros.put("id_ch", id_ch);
                     parametros.put("cantidad", cantidads);
                     parametros.put("mercancia", mercancias);
-                    parametros.put("fecha_ctl", fecha_ctl);
+                    parametros.put("fecha_clt", fecha_ctl);
+                    parametros.put("hora_clt", hora_ctl);
                     parametros.put("observacion", observacion);
-                    parametros.put("transportista", transportista);
+                    parametros.put("transportistas", transportista);
                     parametros.put("placas2", placas2T);
                     parametros.put("usuario", usuario);
                     parametros.put("nombreume", nombreume);
@@ -639,13 +642,9 @@ public class ImportFragment extends Fragment{
     }
 
     private void limpiarTodo() {
-        progress.hide();
-        n_solicitud.setText("");
-        nombre_cliente.setText("");
-        fecha_reg.setText("");
-        estatus.setText("");
-        plaza.setText("");
-        lineatrans.setText("");
+        carga.setChecked(false);
+        descarga.setChecked(false);
+        fec_ini.setText("");
         placas.setText("");
         placas2.setText("");
         conductor.setText("");
@@ -653,7 +652,8 @@ public class ImportFragment extends Fragment{
         mercancia.setText("");
         cantidad.setText("");
         observaciones.setText("");
-        Toast.makeText(getContext(), "Registro Correcto", Toast.LENGTH_LONG).show();
+        lineatrans.setText("");
+        progress.hide();
     }
 
 }
