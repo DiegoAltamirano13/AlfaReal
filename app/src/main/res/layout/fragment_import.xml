@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<ScrollView xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 <LinearLayout
     android:id="@+id/contenedor"
     android:layout_width="match_parent"
@@ -127,38 +126,74 @@
             android:layout_height="wrap_content"
             android:checkedButton="@+id/eventos"
             android:orientation="vertical">
+
             <RadioButton
+                android:id="@+id/carga"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/first_label"
-                android:textAlignment="center">
-            </RadioButton>
+                android:textAlignment="center"></RadioButton>
+
             <RadioButton
+                android:id="@+id/descarga"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/segund_label"
-                android:textAlignment="center">
-            </RadioButton>
+                android:textAlignment="center"></RadioButton>
 
         </RadioGroup>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/btn_ini"
-            android:layout_width="57dp"
-            android:layout_height="61dp"
-            android:drawableBottom="@drawable/calendary"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_ini"
+                android:layout_width="57dp"
+                android:layout_height="61dp"
+                android:drawableBottom="@drawable/calendary" />
+            <EditText
+                android:id="@+id/fecha_inicial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="20dp"
+                android:ems="10"
+                android:hint="@string/formato_fecha"
+                android:textAlignment="center"
+                android:inputType="date"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView"
+                android:focusable="false">
+
+            </EditText>
+        </LinearLayout>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <Button
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <Button
             android:id="@+id/btn_hora"
             android:layout_width="57dp"
             android:layout_height="61dp"
-            android:drawableBottom="@drawable/calendary"/>
+            android:drawableBottom="@drawable/calendary"
+            android:focusable="false"/>
+            <Spinner
+            android:id="@+id/spinner_fecha"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="16dp"/>
+        </LinearLayout>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -170,7 +205,7 @@
             android:hint="Linea Transportista"
             android:layout_gravity="center"
             android:layout_margin="16dp"
-            android:focusable="false"/>
+            android:focusable="true"/>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -203,7 +238,7 @@
             android:hint="Placas"
             android:layout_gravity="center"
             android:layout_margin="16dp"
-            android:focusable="false"/>
+            android:focusable="true"/>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -215,7 +250,7 @@
             android:hint="Placas(2)"
             android:layout_gravity="center"
             android:layout_margin="16dp"
-            android:focusable="false"/>
+            android:focusable="true"/>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -227,7 +262,7 @@
             android:hint="Nombre Conductor"
             android:layout_gravity="center"
             android:layout_margin="16dp"
-            android:focusable="false"/>
+            android:focusable="true"/>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -239,7 +274,7 @@
             android:hint="Identificación"
             android:layout_gravity="center"
             android:layout_margin="16dp"
-            android:focusable="false"/>
+            android:focusable="true"/>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -251,7 +286,7 @@
             android:hint="Mercancia"
             android:layout_gravity="center"
             android:layout_margin="16dp"
-            android:focusable="false"/>
+            android:focusable="true"/>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -263,7 +298,7 @@
             android:hint="Cantidad"
             android:layout_gravity="center"
             android:layout_margin="16dp"
-            android:focusable="false"/>
+            android:focusable="true"/>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -295,20 +330,6 @@
 
 </LinearLayout>
 </ScrollView>
-   <!-- <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/camera"
-        android:id="@+id/btnFoto"
-
-        android:background="@drawable/efecto_button"
-        app:pressedTranslationZ="12dp"
-        android:backgroundTint="@color/md_blue_400"
-        >
-    </android.support.design.widget.FloatingActionButton>-->
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"

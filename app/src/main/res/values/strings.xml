@@ -23,4 +23,5 @@
     </string-array>
     <string name="first_label">Carga</string>
     <string name="segund_label">Descarga</string>
+    <string name="formato_fecha">dd/mm/yyyy</string>
 </resources>

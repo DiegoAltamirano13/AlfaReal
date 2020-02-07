@@ -2,6 +2,7 @@ package com.diego.lina.sistemadealmacenes;
 
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentProvider;
@@ -34,7 +35,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.Layout;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,8 +46,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,10 +79,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
@@ -106,15 +115,14 @@ public class ImportFragment extends Fragment{
     String plaza_c;
     EditText n_solicitud, nombre_cliente, fecha_reg, estatus, plaza, eventos, lineatrans, placas, placas2, conductor,identificacion , mercancia, cantidad, observaciones;
     Button btn_ini, btn_hora;
-    private Spinner spinnerAlmacen, spinner_vehiculo, spinner_marca, spinner_unidad_medida;
+    private Spinner spinnerAlmacen, spinner_vehiculo, spinner_marca, spinner_unidad_medida, spinner_fecha;
     FloatingActionButton btn_registro;
     StringRequest stringRequest;
     TextView reg;
-    //finalizar
-    //Detalles de conexion y carga
     ProgressDialog progress;
     RequestQueue request;
 
+    RadioButton carga, descarga;
     //Actualizador
     private AutoUpdater updater;
     private Context context;
@@ -122,10 +130,14 @@ public class ImportFragment extends Fragment{
     ArrayList<String>clientes;
     ArrayList<String>marcasVehiculos;
     ArrayList<String>tipoVehiculo;
+    ArrayList<String>tipo_mercancia;
+    ArrayList<String>hora;
     //variables de url
     String sp_plaza;
     String sp_cliente_num;
-
+    private  int dia, mes, anio;
+    String fechasinicial;
+    EditText fec_ini;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,7 +170,7 @@ public class ImportFragment extends Fragment{
         fecha_reg = fragmento.findViewById(R.id.fecha_reg);
         estatus = fragmento.findViewById(R.id.estatus);
         plaza = fragmento.findViewById(R.id.plaza);
-        eventos = fragmento.findViewById(R.id.eventos);
+        //eventos = fragmento.findViewById(R.id.eventos);
         lineatrans = fragmento.findViewById(R.id.lineatrans);
         placas = fragmento.findViewById(R.id.placas);
         placas2 = fragmento.findViewById(R.id.placas2);
@@ -167,6 +179,7 @@ public class ImportFragment extends Fragment{
         mercancia = fragmento.findViewById(R.id.mercancia);
         cantidad = fragmento.findViewById(R.id.cantidad);
         observaciones = fragmento.findViewById(R.id.observaciones);
+        fec_ini = fragmento.findViewById(R.id.fecha_inicial);
         //Botones de envio
         btn_registro = fragmento.findViewById(R.id.registrar);
 
@@ -176,12 +189,19 @@ public class ImportFragment extends Fragment{
         clientes = new ArrayList<>();
         marcasVehiculos = new ArrayList<>();
         tipoVehiculo = new ArrayList<>();
+        tipo_mercancia = new ArrayList<>();
+        hora = new ArrayList<>();
         spinnerAlmacen = fragmento.findViewById(R.id.spinner_almacen);
         spinner_marca = fragmento.findViewById(R.id.spinner_marca);
         spinner_vehiculo = fragmento.findViewById(R.id.spinner_vehiculo);
+        spinner_unidad_medida = fragmento.findViewById(R.id.spinner_unidad_medida);
+        spinner_fecha = fragmento.findViewById(R.id.spinner_fecha);
+        carga = fragmento.findViewById(R.id.carga);
+        descarga = fragmento.findViewById(R.id.descarga);
         listar();
         listar_marcaV();
         listar_TipoV();
+        listar_TipoM();
 
         String sp_n_cliente = preferences.getString("as_nombre", "No Cliente");
         nombre_cliente.setText(sp_n_cliente);
@@ -198,10 +218,140 @@ public class ImportFragment extends Fragment{
                 }
             });
 
+        btn_ini= fragmento.findViewById(R.id.btn_ini);
 
+        btn_ini.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v == btn_ini){
+                    final Calendar calendar = Calendar.getInstance();
+                    dia = calendar.get(Calendar.DAY_OF_MONTH);
+                    mes = calendar.get(Calendar.MONTH);
+                    anio = calendar.get(Calendar.YEAR);
 
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            month = month+1;
+                            String fomatoMonth = "" + month;
+                            String formatoDia = "" + dayOfMonth;
+                            if (month < 10){
+                                fomatoMonth = "0"+month;
+                            }
+                            if (dayOfMonth<10){
+                                formatoDia = "0" + dayOfMonth;
+                            }
+                            fechasinicial = year + "-" + fomatoMonth + "-" + formatoDia;
+                            String fecha_datapicker = (formatoDia +"/" + fomatoMonth +"/" + year);
+                            fec_ini.setText(formatoDia +"/" + fomatoMonth +"/" + year);
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                            Date date = new Date();
+                            String fecha_comparativa = dateFormat.format(date);
+                            if (fecha_comparativa.equals(fecha_datapicker) ){
+                                Toast.makeText(getContext(), "No hay disponibilidad de citas en el almacen", Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                    }, anio, mes, dia);
+                    datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+                    datePickerDialog.show();
+                }
+            }
+        });
+
+        fec_ini.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mostrar_Horas_Spinner();
+            }
+        });
 
         return fragmento;
+    }
+
+    private void mostrar_Horas_Spinner() {
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        String sp_almacen;
+        sp_almacen = "";
+        sp_almacen = spinnerAlmacen.getSelectedItem().toString();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+        Date date = new Date();
+        String fecha_comparativa = dateFormat.format(date);
+        String fec_inis;
+        fec_inis = "";
+        fec_inis = fec_ini.getText().toString();
+        String tipo_mvto;
+        tipo_mvto = "";
+        if(carga.isChecked())
+            tipo_mvto = "1";
+        if (descarga.isChecked())
+            tipo_mvto = "2";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ClassConection.URL_WEBB_SERVICES + "horas_disponibles_spinnes.php?almacen="+sp_almacen+"&tipo="+tipo_mvto+"&fecha_actual="+fecha_comparativa+"&fecha_cita="+fec_inis, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray jsonArray = jsonObject.getJSONArray("usuario");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        String country = jsonObject1.getString("HORA_DIA");
+                        hora.add(country);
+                    }
+                    spinner_fecha.setAdapter(new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, hora));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        stringRequest.setRetryPolicy(policy);
+        requestQueue.add(stringRequest);
+    }
+
+    private void listar_TipoM() {
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ClassConection.URL_WEBB_SERVICES + "tipo_mercancia_cliente.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray jsonArray = jsonObject.getJSONArray("usuario");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        String country = jsonObject1.getString("V_DESCRIPCION");
+                        tipo_mercancia.add(country);
+                    }
+                    spinner_unidad_medida.setAdapter(new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, tipo_mercancia));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        stringRequest.setRetryPolicy(policy);
+        requestQueue.add(stringRequest);
     }
 
     private void listar_TipoV() {
@@ -264,8 +414,6 @@ public class ImportFragment extends Fragment{
         requestQueue.add(stringRequest);
     }
 
-
-
     public void listar() {
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         SharedPreferences preferences = this.getActivity().getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
@@ -301,12 +449,9 @@ public class ImportFragment extends Fragment{
     }
 
     private void validarCampos() {
-        String n_solicituds = n_solicitud.getText().toString();
         String nombre_clientes = nombre_cliente.getText().toString();
-        String fecha_regs = fecha_reg.getText().toString();
         String estatuss = estatus.getText().toString();
         String plazas = plaza.getText().toString();
-        String eventoss= eventos.getText().toString();
         String lineatranss = lineatrans.getText().toString();
         String placass = placas.getText().toString();
         String placas2s= placas2.getText().toString();
@@ -316,12 +461,34 @@ public class ImportFragment extends Fragment{
         String cantidads = cantidad.getText().toString();
         String observacioness = observaciones.getText().toString();
 
-        boolean a = validar_desc_merca(n_solicituds);
+       // plazas = plazas.replace("(", "");
+       // plazas = plazas.replace(")", "");
+        String sp_almacen;
+        sp_almacen = "";
+        sp_almacen = spinnerAlmacen.getSelectedItem().toString();
+
+        String sp_vehiculo;
+        sp_vehiculo = "";
+        sp_vehiculo = spinner_vehiculo.getSelectedItem().toString();
+
+        String sp_marca;
+        sp_marca = "";
+        sp_marca = spinner_marca.getSelectedItem().toString();
+
+        String sp_unidad_medida;
+        sp_unidad_medida = "";
+        sp_unidad_medida = spinner_unidad_medida.getSelectedItem().toString();
+
+        String tipo_mvto;
+        tipo_mvto = "";
+        if(carga.isChecked())
+            tipo_mvto = "1";
+        if (descarga.isChecked())
+            tipo_mvto = "2";
+
         boolean b = validar_desc_merca(nombre_clientes);
-        boolean c = validar_desc_merca(fecha_regs);
         boolean d = validar_desc_merca(estatuss);
         boolean e = validar_desc_merca(plazas);
-        boolean f = validar_desc_merca(eventoss);
         boolean g = validar_desc_merca(lineatranss);
         boolean h = validar_desc_merca(placass);
         boolean i = validar_desc_merca(placas2s);
@@ -329,17 +496,27 @@ public class ImportFragment extends Fragment{
         boolean k = validar_desc_merca(identificacions);
         boolean l = validar_desc_merca(mercancias);
         boolean m = validar_desc_merca(cantidads);
-        boolean n = validar_desc_merca(observacioness);
+        boolean o = validar_desc_merca(sp_almacen);
+        boolean q = validar_desc_merca(sp_vehiculo);
+        boolean r = validar_desc_merca(sp_marca);
+        boolean s = validar_desc_merca(sp_unidad_medida);
+        boolean t = validar_desc_merca(tipo_mvto);
 
-        if (a && b && c && d && e && f && g && h && i && j && k && l && m && n){
+        if ( b && d && e && g && h && i && j && k && l && m && o && q && r && s && t){
             cargarService();
+        }
+        else {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext());
+            builder.setMessage("Es necesario llenar todos los campos").setNegativeButton("Aceptar", null)
+                    .create().show();
         }
     }
 
     private boolean validar_desc_merca(String desc_mercas) {
-        String desc_merca = desc_mercas;
-        Pattern patron = Pattern.compile("^[a-zA-ZÁáÀàÉéÈèÍíÌìÓóÒòÚúÙùÑñüÜ00-9ñN !@#\\$%\\^&\\*\\?_~\\/]+$");
-        if (!patron.matcher(desc_mercas).matches() || desc_mercas.length()>160) {
+        String desc_mercas2 = desc_mercas;
+        Pattern patron = Pattern.compile("^[a-zA-ZÁáÀàÉéÈèÍíÌìÓóÒòÚúÙùÑñüÜ00-9ñN !@#\\$%\\^&\\*\\?_~\\(\\)\\.\\/]+$");
+        if (!patron.matcher(desc_mercas2).matches() || desc_mercas2.length()>160 || desc_mercas2.length() == 0) {
+
             return false;
         }
         else {
@@ -360,12 +537,9 @@ public class ImportFragment extends Fragment{
     }
 
     private void cargarService() {
-        final String n_solicituds = n_solicitud.getText().toString();
         final String nombre_clientes = nombre_cliente.getText().toString();
-        final String fecha_regs = fecha_reg.getText().toString();
         final String estatuss = estatus.getText().toString();
         final String plazas = plaza.getText().toString();
-        final String eventoss= eventos.getText().toString();
         final String lineatranss = lineatrans.getText().toString();
         final String placass = placas.getText().toString();
         final String placas2s= placas2.getText().toString();
@@ -375,7 +549,7 @@ public class ImportFragment extends Fragment{
         final String cantidads = cantidad.getText().toString();
         final String observacioness = observaciones.getText().toString();
 
-        if (n_solicituds.length() == 0 || nombre_clientes.length() == 0 || fecha_regs.length() == 0  || estatuss.length() == 0 || plazas.length() == 0 || eventoss.length() == 0 || lineatranss.length() == 0 || placass.length() == 0  || conductors.length() == 0 || identificacions.length() == 0  || mercancias.length() == 0  || cantidads.length() == 0){
+        if (nombre_clientes.length() == 0  || estatuss.length() == 0 || plazas.length() == 0  || lineatranss.length() == 0 || placass.length() == 0  || conductors.length() == 0 || identificacions.length() == 0  || mercancias.length() == 0  || cantidads.length() == 0){
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext());
             builder.setMessage("Es necesario llenar todos los campos").setNegativeButton("Aceptar", null)
                     .create().show();
@@ -384,7 +558,8 @@ public class ImportFragment extends Fragment{
             progress = new ProgressDialog(getContext());
             progress.setMessage("Procesando registro...");
             progress.show();
-            final String url = "http://sistemasdecontrolderiego.esy.es/Registro_Mercancia.php";
+            //final String url = "http://sistemasdecontrolderiego.esy.es/Registro_Mercancia.php";
+            final String url = "http://187.141.70.76/android_app/registro_solicitud.php";
 
             stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
@@ -394,6 +569,7 @@ public class ImportFragment extends Fragment{
 
                     } else {
                         Toast.makeText(getContext(), "NO SE LLEVO ACABO EL REGISTRO", Toast.LENGTH_SHORT).show();
+                        progress.hide();
                     }
                 }
             }, new Response.ErrorListener() {
@@ -409,35 +585,50 @@ public class ImportFragment extends Fragment{
             ) {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
-                     String n_solicituds = n_solicitud.getText().toString();
-                     String nombre_clientes = nombre_cliente.getText().toString();
-                     String fecha_regs = fecha_reg.getText().toString();
-                     String estatuss = estatus.getText().toString();
-                     String plazas = plaza.getText().toString();
-                     String eventoss= eventos.getText().toString();
-                     String lineatranss = lineatrans.getText().toString();
+                    SharedPreferences preferences = getActivity().getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
+                     String nombreplaza = plaza.getText().toString();
+                     String nombrealmacen = spinnerAlmacen.getSelectedItem().toString();
+                     String nombrecliente = nombre_cliente.getText().toString();
+                        String tipo;
+                        tipo = "";
+                        if(carga.isChecked())
+                            tipo = "1";
+                        if (descarga.isChecked())
+                            tipo = "2";
+                     String tipovehiculo = spinner_vehiculo.getSelectedItem().toString();
+                     String marcavehiculo = spinner_marca.getSelectedItem().toString();
                      String placass = placas.getText().toString();
-                     String placas2s= placas2.getText().toString();
-                     String conductors= conductor.getText().toString();
-                     String identificacions = identificacion.getText().toString();
-                     String mercancias= mercancia.getText().toString();
+                     String chofer= conductor.getText().toString();
+                     String id_ch = identificacion.getText().toString();
                      String cantidads = cantidad.getText().toString();
-                     String observacioness = observaciones.getText().toString();
+                     String mercancias= mercancia.getText().toString();
+                     String fecha_ctl = fec_ini.getText().toString()+" "+spinner_fecha.getSelectedItem().toString();
+                     String observacion = observaciones.getText().toString();
+                     String transportista = lineatrans.getText().toString();
+                     String placas2T = placas2.getText().toString();
+                     String nombreume = spinner_unidad_medida.getSelectedItem().toString();
+
+                     String usuario = "";
+                     usuario = preferences.getString("as_cliente", "No cliente");
                     Map<String, String> parametros = new HashMap<>();
-                    parametros.put("n_solicituds", n_solicituds);
-                    parametros.put("nombre_clientes", nombre_clientes);
-                    parametros.put("fecha_regs", fecha_regs);
-                    parametros.put("estatuss", estatuss);
-                    parametros.put("plazas", plazas);
-                    parametros.put("eventoss", eventoss);
-                    parametros.put("lineatranss", lineatranss);
-                    parametros.put("placass", placass);
-                    parametros.put("placas2s", placas2s);
-                    parametros.put("conductors", conductors);
-                    parametros.put("identificacions", identificacions);
-                    parametros.put("mercancias", mercancias);
-                    parametros.put("cantidads", cantidads);
-                    parametros.put("observacioness", observacioness);
+                    parametros.put("nombreplaza", nombreplaza);
+                    parametros.put("nombrealmacen", nombrealmacen);
+                    parametros.put("nombrecliente", nombrecliente);
+                    parametros.put("tipo", tipo);
+                    parametros.put("tipovehiculo", tipovehiculo);
+                    parametros.put("marcavehiculo", marcavehiculo);
+                    parametros.put("placas", placass);
+                    parametros.put("chofer", chofer);
+                    parametros.put("id_ch", id_ch);
+                    parametros.put("cantidad", cantidads);
+                    parametros.put("mercancia", mercancias);
+                    parametros.put("fecha_ctl", fecha_ctl);
+                    parametros.put("observacion", observacion);
+                    parametros.put("transportista", transportista);
+                    parametros.put("placas2", placas2T);
+                    parametros.put("usuario", usuario);
+                    parametros.put("nombreume", nombreume);
+
                     return parametros;
                 }
             };
@@ -454,7 +645,6 @@ public class ImportFragment extends Fragment{
         fecha_reg.setText("");
         estatus.setText("");
         plaza.setText("");
-        eventos.setText("");
         lineatrans.setText("");
         placas.setText("");
         placas2.setText("");
