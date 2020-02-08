@@ -6,28 +6,22 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_backgrownd"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:gravity="center">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:id="@+id/tituloLogin"
-        android:text="Argo Almacenadora"
-        android:textColor="@color/md_white_1000"
-        android:textSize="30dp"
-        android:layout_marginBottom="20dp"
-        android:layout_margin="50dp"
-        android:textAlignment="center"
-        android:fontFamily="@font/boldblue"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="580dp"
         android:orientation="vertical"
         android:layout_margin="30dp"
         android:background="@drawable/cuadro_blanco"
         >
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/logo"
+            android:layout_gravity="center"/>
     <android.support.design.widget.TextInputLayout
         android:layout_marginTop="50dp"
         android:layout_width="match_parent"
