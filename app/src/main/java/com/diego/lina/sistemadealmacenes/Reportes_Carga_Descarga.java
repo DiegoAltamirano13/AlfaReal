@@ -75,6 +75,7 @@ public class Reportes_Carga_Descarga extends Fragment implements Response.Listen
                         listaSolicitud.setNombre_ume(jsonObject.optString("NOMBREUME"));
                         listaSolicitud.setVid_usuario_cliente(jsonObject.optString("VID_USUARIO_CLIENTE"));
                         listaSolicitudes.add(listaSolicitud);
+                        Toast.makeText(getContext(), jsonObject.optString("D_FEC_LLEGADA_APROX"), Toast.LENGTH_LONG).show();
                     }
                     final SolicitudesAdapter solicitudesAdapter = new SolicitudesAdapter(listaSolicitudes, getContext());
                     recyclerView.setAdapter(solicitudesAdapter);
