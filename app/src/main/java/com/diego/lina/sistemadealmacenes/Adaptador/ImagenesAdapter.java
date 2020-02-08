@@ -119,7 +119,6 @@ public class ImagenesAdapter extends RecyclerView.Adapter<ImagenesAdapter.Mercan
 
 
             titulo1 = fragmento.findViewById(R.id.titulo1);
-            //titulo3 = fragmento.findViewById(R.id.titulo3);
             titulo4 = fragmento.findViewById(R.id.titulo4);
         }
     }

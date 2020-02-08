@@ -97,20 +97,13 @@ public class principal_pagina_menu extends AppCompatActivity
             transaction.addToBackStack(null);
             transaction.replace(R.id.contenedor, importFragment);
             transaction.commit();
-        } else if (id == R.id.nav_add) {
-            //fragmentManager.beginTransaction().replace(R.id.contenedor, new registra_mas_imagenes()).commit();
-            registra_mas_imagenes registraMasImagenes = new registra_mas_imagenes();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-            transaction.addToBackStack(null);
-            transaction.replace(R.id.contenedor, registraMasImagenes);
-            transaction.commit();
         } else if (id == R.id.nav_gallery) {
             //fragmentManager.beginTransaction().replace(R.id.contenedor, new ReportesFragment()).commit();
-            ReportesFragment reportesFragment = new ReportesFragment();
+            Reportes_Carga_Descarga reportesFragment = new Reportes_Carga_Descarga();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             transaction.addToBackStack(null);
+            //transaction.replace(R.id.contenedor, reportesFragment);
             transaction.replace(R.id.contenedor, reportesFragment);
             transaction.commit();
         } else if (id == R.id.nav_gallery2) {
