@@ -19,7 +19,7 @@
         android:layout_gravity="left"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:src="@drawable/usuario_img" />
+        android:src="@drawable/circlelogo" />
 
     <TextView
         android:id="@+id/as_usr_nombre2"
@@ -31,7 +31,7 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:layout_gravity="center"
-        android:fontFamily="@font/boldblue"
+        android:fontFamily="sans-serif"
         android:textColor="@color/md_lime_50"/>
 
     <TextView
@@ -42,7 +42,7 @@
         android:textAlignment="center"
         android:layout_marginTop="2dp"
         android:layout_gravity="center"
-        android:fontFamily="@font/boldblue"
+        android:fontFamily="sans-serif"
         android:textColor="@color/md_white_1000"/>
 
 </LinearLayout>

@@ -14,11 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:orientation="vertical">
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
@@ -26,15 +21,14 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_principal_pagina_menu"
-        app:menu="@menu/activity_principal_pagina_menu_drawer">
+        app:headerLayout="@layout/nav_header_principal_pagina_menu">
+        <!--app:menu="@menu/activity_principal_pagina_menu_drawer"-->
+
 
         <ExpandableListView
             android:id="@+id/left_drawer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="450dp"
-            />
+            android:paddingTop="@dimen/nav_header_height" />
     </android.support.design.widget.NavigationView>
-    </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

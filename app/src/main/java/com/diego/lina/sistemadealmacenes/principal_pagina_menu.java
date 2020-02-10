@@ -152,6 +152,11 @@ public class principal_pagina_menu extends AppCompatActivity
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferences preferences = getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.clear();
+                            editor.commit();
+                            finish();
                             Intent intent = new Intent(Intent.ACTION_MAIN);
                             intent.addCategory(Intent.CATEGORY_HOME);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -193,6 +198,15 @@ public class principal_pagina_menu extends AppCompatActivity
                 Toast.makeText(getApplicationContext(),
                         listDataHeader.get(groupPosition) + " Expanded",
                         Toast.LENGTH_SHORT).show();
+                if (listDataHeader.get(groupPosition).equals("Cerrar sessión")){
+                    SharedPreferences preferences = getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.clear();
+                    editor.commit();
+                    finish();
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    drawer.closeDrawer(GravityCompat.START);
+                }
             }
         });
 
@@ -226,6 +240,28 @@ public class principal_pagina_menu extends AppCompatActivity
                                 listDataHeader.get(groupPosition)).get(
                                 childPosition), Toast.LENGTH_SHORT)
                         .show();
+                System.out.println(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
+                if (listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Crear Solicitud")){
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.contenedor, new ImportFragment()).commit();
+                }else if (listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("En proceso")){
+                    Reportes_Carga_Descarga reportesFragment = new Reportes_Carga_Descarga();
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    transaction.addToBackStack(null);
+                    //transaction.replace(R.id.contenedor, reportesFragment);
+                    transaction.replace(R.id.contenedor, reportesFragment);
+                    transaction.commit();
+                }else if (listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Historico")){
+                    Reportes2Fragment reportes2Fragment = new Reportes2Fragment();
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    transaction.addToBackStack(null);
+                    transaction.replace(R.id.contenedor, reportes2Fragment);
+                    transaction.commit();
+                }
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
                 return false;
             }
         });}
@@ -236,11 +272,19 @@ public class principal_pagina_menu extends AppCompatActivity
 
 
         // Adding child data
+        listDataHeader.add("Vehiculos");
         listDataHeader.add("Inventarios");
         listDataHeader.add("Comercio Exterior");
-        listDataHeader.add("Certificaciòn");
+        listDataHeader.add("Certificación");
+        listDataHeader.add("Cerrar sessión");
 
         // Adding child data
+        List<String> vehiculo = new ArrayList<String>();
+        vehiculo.add("Crear Solicitud");
+        vehiculo.add("En proceso");
+        vehiculo.add("Programados");
+        vehiculo.add("Historico");
+
         List<String> top = new ArrayList<String>();
         top.add("Saldo UME por UMC");
         top.add("Saldo desglosado");
@@ -255,10 +299,12 @@ public class principal_pagina_menu extends AppCompatActivity
         List<String> bottom = new ArrayList<String>();
         bottom.add("Saldo (certificado)");
 
+        List<String> salir = new ArrayList<String>();
 
-
-        listDataChild.put(listDataHeader.get(0), top); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), mid);
-        listDataChild.put(listDataHeader.get(2), bottom);
+        listDataChild.put(listDataHeader.get(0), vehiculo); // Header, Child data
+        listDataChild.put(listDataHeader.get(1), top);
+        listDataChild.put(listDataHeader.get(2), mid);
+        listDataChild.put(listDataHeader.get(3), bottom);
+        listDataChild.put(listDataHeader.get(4), salir);
     }
 }
