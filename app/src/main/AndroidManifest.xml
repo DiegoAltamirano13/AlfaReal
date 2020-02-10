@@ -39,7 +39,7 @@
             android:name=".principal_pagina_menu"
             android:label="CONTROL DE EVIDENCIAS
 "
-            android:screenOrientation="portrait"
+            android:screenOrientation="locked"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CargandoApp"
