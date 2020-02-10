@@ -37,10 +37,9 @@
 
         <activity
             android:name=".principal_pagina_menu"
-            android:label="CONTROL DE EVIDENCIAS
-"
+            android:label="ARGO Clientes"
             android:screenOrientation="locked"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
         <activity
             android:name=".CargandoApp"
             android:theme="@style/SplashTheme">

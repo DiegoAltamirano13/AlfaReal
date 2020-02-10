@@ -128,6 +128,8 @@
             android:orientation="vertical">
 
             <RadioButton
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
                 android:id="@+id/carga"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -136,6 +138,8 @@
 
             <RadioButton
                 android:id="@+id/descarga"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/segund_label"
@@ -151,11 +155,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <Button
+            <ImageButton
                 android:id="@+id/btn_ini"
                 android:layout_width="57dp"
                 android:layout_height="61dp"
-                android:drawableBottom="@drawable/calendary" />
+                android:background="@drawable/shape_circle"
+                android:src="@drawable/ic_calendar_alt_regular"/>
             <EditText
                 android:id="@+id/fecha_inicial"
                 android:layout_width="match_parent"
@@ -181,11 +186,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-            <Button
+            <ImageButton
             android:id="@+id/btn_hora"
             android:layout_width="57dp"
             android:layout_height="61dp"
-            android:drawableBottom="@drawable/calendary"
+            android:background="@drawable/shape_circle"
+            android:src="@drawable/ic_clock_solid"
             android:focusable="false"/>
             <Spinner
             android:id="@+id/spinner_fecha"
