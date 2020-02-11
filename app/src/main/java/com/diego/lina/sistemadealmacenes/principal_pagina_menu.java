@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -84,7 +85,8 @@ public class principal_pagina_menu extends AppCompatActivity
         nombre = navHeader.findViewById(R.id.as_usr_nombre2);
         //= findViewById(R.id.as_usr_nombre2);
         Intent intent = getIntent();
-        String as_usr_nombre = intent.getStringExtra("as_usr_nombre");
+        SharedPreferences preferences = principal_pagina_menu.this.getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
+        String as_usr_nombre = preferences.getString("as_nombre", "No Cliente");
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.contenedor, new ImportFragment()).commit();
 
@@ -206,6 +208,8 @@ public class principal_pagina_menu extends AppCompatActivity
                     finish();
                     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                     drawer.closeDrawer(GravityCompat.START);
+                    Drawable myIcon = getResources().getDrawable(R.drawable.logout);
+                    expListView.setGroupIndicator(myIcon);
                 }
             }
         });
@@ -230,16 +234,6 @@ public class principal_pagina_menu extends AppCompatActivity
                                         int groupPosition, int childPosition, long id) {
                 // TODO Auto-generated method stub
                 // Temporary code:
-
-                // till here
-                Toast.makeText(
-                        getApplicationContext(),
-                        listDataHeader.get(groupPosition)
-                                + " : "
-                                + listDataChild.get(
-                                listDataHeader.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT)
-                        .show();
                 System.out.println(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
                 if (listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Crear Solicitud")){
                     FragmentManager fragmentManager = getSupportFragmentManager();

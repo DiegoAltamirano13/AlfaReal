@@ -1,5 +1,7 @@
 package com.diego.lina.sistemadealmacenes;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,7 +43,12 @@ public class Reportes_Carga_Descarga extends Fragment implements Response.Listen
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        final String url = "http://187.141.70.76/android_app/Reporte_Consulta_Solicitudes.php";
+
+        SharedPreferences preferences = this.getActivity().getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
+        String sp_n_cliente = preferences.getString("as_nombre", "No Cliente");
+        String sp_plaza  = preferences.getString("as_plaza", "No tienes plaza ");
+
+        final String url = "http://187.141.70.76/android_app/Reporte_Consulta_Solicitudes.php?nombrecliente="+sp_n_cliente+"&nombreplaza="+sp_plaza;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override

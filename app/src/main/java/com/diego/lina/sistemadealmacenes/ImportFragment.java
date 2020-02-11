@@ -48,6 +48,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -114,7 +115,7 @@ import static android.app.Activity.RESULT_CANCELED;
 public class ImportFragment extends Fragment{
     String plaza_c;
     EditText n_solicitud, nombre_cliente, fecha_reg, estatus, plaza, eventos, lineatrans, placas, placas2, conductor,identificacion , mercancia, cantidad, observaciones;
-    Button btn_ini, btn_hora;
+    ImageButton btn_ini, btn_hora;
     private Spinner spinnerAlmacen, spinner_vehiculo, spinner_marca, spinner_unidad_medida, spinner_fecha;
     FloatingActionButton btn_registro;
     StringRequest stringRequest;
