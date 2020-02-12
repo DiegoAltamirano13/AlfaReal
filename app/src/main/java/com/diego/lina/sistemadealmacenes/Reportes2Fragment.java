@@ -258,7 +258,7 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
         String sp_plaza  = preferences.getString("as_plaza", "No tienes plaza ");
         String fecha_ini = fec_ini.getText().toString();
         String fecha_fin = fec_fin.getText().toString();
-        String url = "http://187.141.70.76/android_app/Reporte_Consulta_Solicitudes.php?nombrecliente="+sp_n_cliente+"&nombreplaza="+sp_plaza+"&fecha_ini="+fecha_ini+"&fecha_fin="+fecha_fin;
+        String url = "http://187.141.70.76/android_app/Reporte_Consulta_Solicitudes_Hist.php?nombrecliente="+sp_n_cliente+"&nombreplaza="+sp_plaza+"&fecha_ini="+fecha_ini+"&fecha_fin="+fecha_fin;
         Log.i("error", url);
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
 

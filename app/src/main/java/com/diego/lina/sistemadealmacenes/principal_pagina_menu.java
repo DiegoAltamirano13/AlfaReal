@@ -181,6 +181,8 @@ public class principal_pagina_menu extends AppCompatActivity
         // setting list adapter
         expListView.setAdapter(listAdapter);
 
+        //
+
         expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
 
             @Override
@@ -197,19 +199,13 @@ public class principal_pagina_menu extends AppCompatActivity
 
             @Override
             public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Expanded",
-                        Toast.LENGTH_SHORT).show();
+
                 if (listDataHeader.get(groupPosition).equals("Cerrar sessión")){
                     SharedPreferences preferences = getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.clear();
                     editor.commit();
                     finish();
-                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                    drawer.closeDrawer(GravityCompat.START);
-                    Drawable myIcon = getResources().getDrawable(R.drawable.logout);
-                    expListView.setGroupIndicator(myIcon);
                 }
             }
         });
