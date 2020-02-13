@@ -24,6 +24,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -76,6 +77,17 @@ public class principal_pagina_menu extends AppCompatActivity
 
         /*Invocar listview expandible*/
         enableExpandableList();
+        /*Drawable myIcon = getResources().getDrawable(R.drawable.logout);
+        expListView.setGroupIndicator(myIcon);*/
+
+        /*long a = expListView.getFlatListPosition(1); // getExpandableListPosition(4);
+        Toast.makeText(getApplicationContext(),"Valor de AAA "+a,Toast.LENGTH_LONG).show();
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int width = metrics.widthPixels;
+        expListView.setIndicatorBounds(width - GetPixelFromDips(200), width - GetPixelFromDips(10));
+        */
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -181,8 +193,6 @@ public class principal_pagina_menu extends AppCompatActivity
         // setting list adapter
         expListView.setAdapter(listAdapter);
 
-        //
-
         expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
 
             @Override
@@ -199,13 +209,17 @@ public class principal_pagina_menu extends AppCompatActivity
 
             @Override
             public void onGroupExpand(int groupPosition) {
-
+                /*Toast.makeText(getApplicationContext(),
+                        listDataHeader.get(groupPosition) + " Expanded",
+                        Toast.LENGTH_SHORT).show();*/
                 if (listDataHeader.get(groupPosition).equals("Cerrar sessión")){
                     SharedPreferences preferences = getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.clear();
                     editor.commit();
                     finish();
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    drawer.closeDrawer(GravityCompat.START);
                 }
             }
         });
@@ -215,9 +229,9 @@ public class principal_pagina_menu extends AppCompatActivity
 
             @Override
             public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
+                /*Toast.makeText(getApplicationContext(),
                         listDataHeader.get(groupPosition) + " Collapsed",
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();*/
 
             }
         });
@@ -236,6 +250,14 @@ public class principal_pagina_menu extends AppCompatActivity
                     fragmentManager.beginTransaction().replace(R.id.contenedor, new ImportFragment()).commit();
                 }else if (listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("En proceso")){
                     Reportes_Carga_Descarga reportesFragment = new Reportes_Carga_Descarga();
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    transaction.addToBackStack(null);
+                    //transaction.replace(R.id.contenedor, reportesFragment);
+                    transaction.replace(R.id.contenedor, reportesFragment);
+                    transaction.commit();
+                }else if (listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Programados")){
+                    VehiculosProgramados reportesFragment = new VehiculosProgramados();
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                     transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                     transaction.addToBackStack(null);
@@ -264,8 +286,9 @@ public class principal_pagina_menu extends AppCompatActivity
         // Adding child data
         listDataHeader.add("Vehiculos");
         listDataHeader.add("Inventarios");
+        listDataHeader.add("Certificados");
         listDataHeader.add("Comercio Exterior");
-        listDataHeader.add("Certificación");
+        listDataHeader.add("Facturación");
         listDataHeader.add("Cerrar sessión");
 
         // Adding child data
@@ -276,18 +299,28 @@ public class principal_pagina_menu extends AppCompatActivity
         vehiculo.add("Historico");
 
         List<String> top = new ArrayList<String>();
-        top.add("Saldo UME por UMC");
-        top.add("Saldo desglosado");
-        top.add("Saldo desglosado");
-        top.add("Saldo desglosado(Lote)");
-
+        top.add("CD por producto");
+        top.add("Producto c/valor");
+        top.add("Producto c/valor lote serie");
+        top.add("Producto UME");
+        top.add("Producto UME y UMC");
+        top.add("Condensado");
+        top.add("Condensado completo");
+        top.add("Detallado");
+        top.add("Detallado completo");
+        top.add("Productos por cd");
+        top.add("CD's vivos a una fecha");
 
         List<String> mid = new ArrayList<String>();
-        mid.add("Saldo pagado");
-
+        mid.add("Rep. de Certificación");
+        mid.add("Rep. de Certificación desglosada");
 
         List<String> bottom = new ArrayList<String>();
-        bottom.add("Saldo (certificado)");
+        bottom.add("Cotización por pedimento");
+        bottom.add("Cotización por modelo");
+
+        List<String> facturacion = new ArrayList<String>();
+        facturacion.add("Antiguedad de saldos");
 
         List<String> salir = new ArrayList<String>();
 
@@ -295,6 +328,14 @@ public class principal_pagina_menu extends AppCompatActivity
         listDataChild.put(listDataHeader.get(1), top);
         listDataChild.put(listDataHeader.get(2), mid);
         listDataChild.put(listDataHeader.get(3), bottom);
-        listDataChild.put(listDataHeader.get(4), salir);
+        listDataChild.put(listDataHeader.get(4), facturacion);
+        listDataChild.put(listDataHeader.get(5), salir);
+    }
+
+    public int GetPixelFromDips(float pixels) {
+        // Get the screen's density scale
+        final float scale = getResources().getDisplayMetrics().density;
+        // Convert the dps to pixels, based on density scale
+        return (int) (pixels * scale + 0.5f);
     }
 }
