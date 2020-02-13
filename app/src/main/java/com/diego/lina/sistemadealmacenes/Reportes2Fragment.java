@@ -14,6 +14,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -32,7 +33,11 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -45,40 +50,28 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.diego.lina.sistemadealmacenes.Adaptador.ImagenesAdapter;
-import com.diego.lina.sistemadealmacenes.Adaptador.ListaImagenesAdapter;
-import com.diego.lina.sistemadealmacenes.Adaptador.ListaImagenesAdapterConsulta;
-import com.diego.lina.sistemadealmacenes.Adaptador.ListaImagenesAdapterConsultaMensaje;
-import com.diego.lina.sistemadealmacenes.Adaptador.MercanciasAdapter;
 import com.diego.lina.sistemadealmacenes.Entidades.Solicitudes_Carga_Descarga;
-import com.diego.lina.sistemadealmacenes.Entidades.Usuario;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class Reportes2Fragment extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener{
 
-    RecyclerView recyclerMercancias;
     ArrayList<Solicitudes_Carga_Descarga> listaSolicitudes;
     ProgressDialog progress;
 
     RequestQueue requestQueue;
-    ImageView img_no_con;
     private OnFragmentInteractionListener mListener;
     JsonObjectRequest jsonObjectRequest;
     ImagenesAdapter adapter;
     Dialog dialog;
     Typeface typeface;
 
-    Button btn_fec_ini;
-    Button btn_fec_fin;
+    ImageButton btn_fec_ini;
+    ImageButton btn_fec_fin;
     Button buscar;
     EditText fec_ini;
     EditText fec_fin;
@@ -95,6 +88,11 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
     TableRow.LayoutParams lp = new TableRow.LayoutParams(500, 500);
     TableLayout tableLayout;
 
+    ImageView img_no_conError;
+    TextView textViewError;
+    Button buttonError;
+    ScrollView horizontalScrollView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -104,12 +102,7 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
 
         SharedPreferences preferences = this.getActivity().getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
         plaza = preferences.getString("as_plaza_u", "No estas logueado");
-        img_no_con = fragment.findViewById(R.id.no_conect);
         listaSolicitudes = new ArrayList<>();
-        //recyclerMercancias = fragment.findViewById(R.id.idReciclerMercancia);
-        //recyclerMercancias.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        //recyclerMercancias.setHasFixedSize(true);
-        img_no_con.setVisibility(View.INVISIBLE);
         requestQueue= Volley.newRequestQueue(getContext());
 
         //Fechas
@@ -124,6 +117,16 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
         layout_fin.setHintAnimationEnabled(false);
         fec_fin.setOnFocusChangeListener(null);
 
+        //Diego Diseño error
+        img_no_conError = fragment.findViewById(R.id.img_error);
+        textViewError = fragment.findViewById(R.id.textError);
+        buttonError = fragment.findViewById(R.id.btnError);
+        buttonError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cargaWebService();
+            }
+        });
         btn_fec_ini.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,9 +197,6 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
 
                 listaSolicitudes.clear();
 
-                GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),1);
-                //recyclerMercancias.setLayoutManager(gridLayoutManager);
-
                 ConnectivityManager conn = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = conn.getActiveNetworkInfo();
                 if(networkInfo != null && networkInfo.isConnected()) {
@@ -208,7 +208,7 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
                     }
                 }
                 else{
-                    img_no_con.setVisibility(View.VISIBLE);
+                    img_no_conError.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -220,7 +220,7 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
 
         }
         else{
-            img_no_con.setVisibility(View.VISIBLE);
+            img_no_conError.setVisibility(View.VISIBLE);
         }
         adapter = new ImagenesAdapter(listaSolicitudes, getContext());
 
@@ -231,7 +231,9 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
 
         fila.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_table));
         tableLayout = fragment.findViewById(R.id.tableLayoutPackingList);
-
+        tableLayout.setVisibility(View.INVISIBLE);
+        horizontalScrollView = fragment.findViewById(R.id.hscroll);
+        horizontalScrollView.setVisibility(View.INVISIBLE);
         //Creacion de encabezados :D DIEGUITO
         String[] encabezado = {"SOLICITUD", "ALMACEN", "LLEGADA", "DESPACHADO", "ESTATUS", "VEHICULO", "PLACAS", "MERCANCIA", "CANTIDAD"};
 
@@ -244,6 +246,7 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
             fila.addView(tv_talla);
         }
         tableLayout.addView(fila,0);
+
         return fragment;
 
     }
@@ -267,11 +270,14 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        Toast.makeText(getContext(), "Sin registros", Toast.LENGTH_SHORT).show();
         System.out.println();
-        img_no_con.setImageResource(R.drawable.search);
-        img_no_con.setVisibility(View.VISIBLE);
+        img_no_conError.setVisibility(View.VISIBLE);
         Log.d("Error", "Error no reconocido");
+        img_no_conError.setVisibility(View.VISIBLE);
+        textViewError.setVisibility(View.VISIBLE);
+        buttonError.setVisibility(View.INVISIBLE);
+        horizontalScrollView.setVisibility(View.INVISIBLE);
+        tableLayout.setVisibility(View.INVISIBLE);
         progress.hide();
     }
 
@@ -307,24 +313,25 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
                 solicitudCD.setVid_usuario_cliente(jsonObject.optString("VID_USUARIO_CLIENTE"));
 
                     listaSolicitudes.add(solicitudCD);
-
+                    lp.setMargins(5,5,5,5);
                     TableRow datosCarga = new TableRow(getActivity());
                     datosCarga.setLayoutParams(lp);
-
 
                     TextView id_solicitud = new TextView(getActivity());
                     id_solicitud.setText(jsonObject.optString("ID_SOLICITUD"));
                     id_solicitud.setHeight(100);
                     id_solicitud.setWidth(150);
+                    id_solicitud.setTextColor(Color.WHITE);
                     id_solicitud.setBackgroundResource(R.drawable.shape_black);
 
-                    id_solicitud.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+                        id_solicitud.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
                     datosCarga.addView(id_solicitud);
 
                     TextView almacen = new TextView(getActivity());
                     almacen.setText(jsonObject.optString("V_NOMBRE"));
                     almacen.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
                     almacen.setHeight(200);
+
                     datosCarga.addView(almacen);
 
                     TextView llegada = new TextView(getActivity());
@@ -400,15 +407,17 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
                     tableLayout.addView(datosCarga);
                 }
 
+
+                img_no_conError.setVisibility(View.INVISIBLE);
+                textViewError.setVisibility(View.INVISIBLE);
+                buttonError.setVisibility(View.INVISIBLE);
+                horizontalScrollView.setVisibility(View.VISIBLE);
+                tableLayout.setVisibility(View.VISIBLE);
                 progress.hide();
-            //final ImagenesAdapter mercanciasAdapter = new ImagenesAdapter(listaSolicitudes, getContext());
-            //recyclerMercancias.setAdapter(mercanciasAdapter);
 
         }
         catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(getContext(), "No Hay Registros", Toast.LENGTH_SHORT).show();
-
             progress.hide();
         }
     }

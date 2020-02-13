@@ -21,7 +21,7 @@
         <item>Bueno</item>
         <item>Excelente</item>
     </string-array>
-    <string name="first_label">Carga</string>
-    <string name="segund_label">Descarga</string>
+    <string name="first_label">CARGA</string>
+    <string name="segund_label">DESCARGA</string>
     <string name="formato_fecha">dd/mm/yyyy</string>
 </resources>

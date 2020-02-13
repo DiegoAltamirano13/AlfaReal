@@ -192,13 +192,14 @@
             android:layout_height="61dp"
             android:background="@drawable/shape_circle"
             android:src="@drawable/ic_clock_solid"
-            android:focusable="false"/>
+            android:focusable="true"/>
             <Spinner
             android:id="@+id/spinner_fecha"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_margin="16dp"/>
+            android:focusable="false"
+            android:layout_margin="16dp" />
         </LinearLayout>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
@@ -211,7 +212,8 @@
             android:hint="Linea Transportista"
             android:layout_gravity="center"
             android:layout_margin="16dp"
-            android:focusable="true"/>
+            android:focusable="true"
+            android:inputType="textCapCharacters"/>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -242,6 +244,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/placas"
             android:hint="Placas"
+            android:inputType="textCapCharacters"
             android:layout_gravity="center"
             android:layout_margin="16dp"
             android:focusable="true"/>
@@ -254,6 +257,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/placas2"
             android:hint="Placas(2)"
+            android:inputType="textCapCharacters"
             android:layout_gravity="center"
             android:layout_margin="16dp"
             android:focusable="true"/>
@@ -267,6 +271,7 @@
             android:id="@+id/conductor"
             android:hint="Nombre Conductor"
             android:layout_gravity="center"
+            android:inputType="textCapCharacters"
             android:layout_margin="16dp"
             android:focusable="true"/>
     </android.support.design.widget.TextInputLayout>
@@ -278,6 +283,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/identificacion"
             android:hint="Identificación"
+            android:inputType="textCapCharacters"
             android:layout_gravity="center"
             android:layout_margin="16dp"
             android:focusable="true"/>
@@ -290,6 +296,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/mercancia"
             android:hint="Mercancia"
+            android:inputType="textCapCharacters"
             android:layout_gravity="center"
             android:layout_margin="16dp"
             android:focusable="true"/>
@@ -302,6 +309,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/cantidad"
             android:hint="Cantidad"
+            android:inputType="textCapCharacters"
             android:layout_gravity="center"
             android:layout_margin="16dp"
             android:focusable="true"/>
@@ -324,6 +332,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/observaciones"
             android:hint="Observaciones"
+            android:inputType="textCapCharacters"
             android:layout_gravity="center"
             android:layout_margin="16dp" />
     </android.support.design.widget.TextInputLayout>

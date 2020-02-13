@@ -9,7 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TableLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -33,6 +36,10 @@ public class Reportes_Carga_Descarga extends Fragment implements Response.Listen
     RecyclerView recyclerView;
     ArrayList<Solicitudes_Carga_Descarga>listaSolicitudes;
 
+    ImageView imageViewError;
+    Button buttonError;
+    TextView textViewError;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
@@ -43,6 +50,10 @@ public class Reportes_Carga_Descarga extends Fragment implements Response.Listen
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+
+        imageViewError = fragment.findViewById(R.id.img_error);
+        buttonError = fragment.findViewById(R.id.btnError);
+        textViewError = fragment.findViewById(R.id.textError);
 
         SharedPreferences preferences = this.getActivity().getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
         String sp_n_cliente = preferences.getString("as_nombre", "No Cliente");
@@ -82,7 +93,11 @@ public class Reportes_Carga_Descarga extends Fragment implements Response.Listen
                         listaSolicitud.setNombre_ume(jsonObject.optString("NOMBREUME"));
                         listaSolicitud.setVid_usuario_cliente(jsonObject.optString("VID_USUARIO_CLIENTE"));
                         listaSolicitudes.add(listaSolicitud);
-                        Toast.makeText(getContext(), jsonObject.optString("D_FEC_LLEGADA_APROX"), Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getContext(), jsonObject.optString("D_FEC_LLEGADA_APROX"), Toast.LENGTH_LONG).show();
+
+                        imageViewError.setVisibility(View.INVISIBLE);
+                        buttonError.setVisibility(View.INVISIBLE);
+                        textViewError.setVisibility(View.INVISIBLE);
                     }
                     final SolicitudesAdapter solicitudesAdapter = new SolicitudesAdapter(listaSolicitudes, getContext());
                     recyclerView.setAdapter(solicitudesAdapter);
@@ -93,7 +108,10 @@ public class Reportes_Carga_Descarga extends Fragment implements Response.Listen
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(), "PARCE NO HAY NADA ", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), "PARCE NO HAY NADA ", Toast.LENGTH_LONG).show();
+                imageViewError.setVisibility(View.VISIBLE);
+                buttonError.setVisibility(View.VISIBLE);
+                textViewError.setVisibility(View.VISIBLE);
             }
         });
         requestQueue.add(jsonObjectRequest);

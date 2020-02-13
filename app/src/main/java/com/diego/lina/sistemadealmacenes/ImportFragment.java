@@ -206,7 +206,7 @@ public class ImportFragment extends Fragment{
 
         String sp_n_cliente = preferences.getString("as_nombre", "No Cliente");
         nombre_cliente.setText(sp_n_cliente);
-        estatus.setText("Preregistro");
+        estatus.setText("PREREGISTRO");
         sp_plaza = preferences.getString("as_plaza", "No tienes plaza ");
         plaza.setText(sp_plaza);
         sp_cliente_num = preferences.getString("as_cliente", "No Tiene Cliente");
@@ -277,6 +277,15 @@ public class ImportFragment extends Fragment{
             }
         });
 
+        btn_hora = fragmento.findViewById(R.id.btn_hora);
+        btn_hora.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spinner_fecha.performClick();
+               // Toast.makeText(getContext(), "NADA", Toast.LENGTH_LONG).show();
+            }
+        });
+
         return fragmento;
     }
 
@@ -286,8 +295,14 @@ public class ImportFragment extends Fragment{
         sp_almacen = "";
         sp_almacen = spinnerAlmacen.getSelectedItem().toString();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
         Date date = new Date();
+        Date date1 = new Date();
+
         String fecha_comparativa = dateFormat.format(date);
+        String fechaComp = dateFormat1.format(date);
+
         String fec_inis;
         fec_inis = "";
         fec_inis = fec_ini.getText().toString();
@@ -297,32 +312,37 @@ public class ImportFragment extends Fragment{
             tipo_mvto = "1";
         if (descarga.isChecked())
             tipo_mvto = "2";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ClassConection.URL_WEBB_SERVICES + "horas_disponibles_spinnes.php?almacen="+sp_almacen+"&tipo="+tipo_mvto+"&fecha_actual="+fecha_comparativa+"&fecha_cita="+fec_inis, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONArray jsonArray = jsonObject.getJSONArray("usuario");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        String country = jsonObject1.getString("HORA_DIA");
-                        hora.add(country);
+        if (fechaComp.equals(fec_inis)){
+
+        }
+        else{
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, ClassConection.URL_WEBB_SERVICES + "horas_disponibles_spinnes.php?almacen=" + sp_almacen + "&tipo=" + tipo_mvto + "&fecha_actual=" + fecha_comparativa + "&fecha_cita=" + fec_inis, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        JSONArray jsonArray = jsonObject.getJSONArray("usuario");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                            String country = jsonObject1.getString("HORA_DIA");
+                            hora.add(country);
+                        }
+                        spinner_fecha.setAdapter(new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, hora));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    spinner_fecha.setAdapter(new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, hora));
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            });
         int socketTimeout = 30000;
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         stringRequest.setRetryPolicy(policy);
         requestQueue.add(stringRequest);
+        }
     }
 
     private void listar_TipoM() {
@@ -492,7 +512,6 @@ public class ImportFragment extends Fragment{
         boolean e = validar_desc_merca(plazas);
         boolean g = validar_desc_merca(lineatranss);
         boolean h = validar_desc_merca(placass);
-        boolean i = validar_desc_merca(placas2s);
         boolean j = validar_desc_merca(conductors);
         boolean k = validar_desc_merca(identificacions);
         boolean l = validar_desc_merca(mercancias);
@@ -503,7 +522,7 @@ public class ImportFragment extends Fragment{
         boolean s = validar_desc_merca(sp_unidad_medida);
         boolean t = validar_desc_merca(tipo_mvto);
 
-        if ( b && d && e && g && h && i && j && k && l && m && o && q && r && s && t){
+        if ( b && d && e && g && h && j && k && l && m && o && q && r && s && t){
             cargarService();
         }
         else {

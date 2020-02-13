@@ -1,5 +1,7 @@
 package com.diego.lina.sistemadealmacenes;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -31,6 +36,12 @@ public class VehiculosProgramados extends Fragment implements Response.Listener<
     RecyclerView recyclerView;
     ArrayList<Solicitudes_Carga_Descarga> listaSolicitudes;
 
+    //Nuevo diseño on error :v
+    ImageView imageViewError;
+    Button buttonError;
+    TextView textViewError;
+    ProgressDialog progressDialog ;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
@@ -40,14 +51,36 @@ public class VehiculosProgramados extends Fragment implements Response.Listener<
         recyclerView = fragment.findViewById(R.id.idReciclerSolicitudes);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 
+
+        imageViewError = fragment.findViewById(R.id.img_error);
+        buttonError = fragment.findViewById(R.id.btnError);
+        textViewError = fragment.findViewById(R.id.textError);
+
+
+        cargarRegistros();
+
+        buttonError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressDialog = new ProgressDialog(getContext());
+                progressDialog.setTitle("Buscando...");
+                progressDialog.setMessage("Esto llevara unos segundos");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.show();
+                cargarRegistros();
+            }
+        });
+
+        return fragment;
+    }
+
+    private void cargarRegistros() {
         SharedPreferences preferences = this.getActivity().getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
         String sp_n_cliente = preferences.getString("as_nombre", "No Cliente");
         String sp_plaza  = preferences.getString("as_plaza", "No tienes plaza ");
-
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         final String url = "http://187.141.70.76/android_app/Reporte_Programados.php?nombrecliente="+sp_n_cliente+"&nombreplaza="+sp_plaza;
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -80,23 +113,44 @@ public class VehiculosProgramados extends Fragment implements Response.Listener<
                         listaSolicitud.setNombre_ume(jsonObject.optString("NOMBREUME"));
                         listaSolicitud.setVid_usuario_cliente(jsonObject.optString("VID_USUARIO_CLIENTE"));
                         listaSolicitudes.add(listaSolicitud);
-                        Toast.makeText(getContext(), jsonObject.optString("D_FEC_LLEGADA_APROX"), Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getContext(), jsonObject.optString("D_FEC_LLEGADA_APROX"), Toast.LENGTH_LONG).show();
+
+                        imageViewError.setVisibility(View.INVISIBLE);
+                        buttonError.setVisibility(View.INVISIBLE);
+                        textViewError.setVisibility(View.INVISIBLE);
+                        if (progressDialog == null){
+
+                        }else {
+                            progressDialog.hide();
+                        }
                     }
                     final SolicitudesAdapter solicitudesAdapter = new SolicitudesAdapter(listaSolicitudes, getContext());
                     recyclerView.setAdapter(solicitudesAdapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    if (progressDialog == null){
+
+                    }else {
+                        progressDialog.hide();
+                    }
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(), "PARCE NO HAY NADA ", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), "SIN REGISTROS", Toast.LENGTH_LONG).show();
+                imageViewError.setVisibility(View.VISIBLE);
+                buttonError.setVisibility(View.INVISIBLE);
+                textViewError.setVisibility(View.VISIBLE);
+                if (progressDialog == null){
+
+                }else {
+                    progressDialog.hide();
+                }
+
             }
         });
         requestQueue.add(jsonObjectRequest);
-        return fragment;
-
     }
 
     @Override
