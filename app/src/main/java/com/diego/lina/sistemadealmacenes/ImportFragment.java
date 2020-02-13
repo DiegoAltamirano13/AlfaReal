@@ -1,7 +1,6 @@
 package com.diego.lina.sistemadealmacenes;
 
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -33,6 +32,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -248,8 +248,12 @@ public class ImportFragment extends Fragment{
                             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                             Date date = new Date();
                             String fecha_comparativa = dateFormat.format(date);
+
                             if (fecha_comparativa.equals(fecha_datapicker) ){
-                                Toast.makeText(getContext(), "No hay disponibilidad de citas en el almacen", Toast.LENGTH_LONG).show();
+                               android.support.v7.app.AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                builder.setMessage("No hay disponibilidad de horas ").setTitle("Aviso")
+                                        .setPositiveButton("Aceptar", null)
+                                        .create().show();
                             }
 
                         }
@@ -313,7 +317,7 @@ public class ImportFragment extends Fragment{
         if (descarga.isChecked())
             tipo_mvto = "2";
         if (fechaComp.equals(fec_inis)){
-
+                spinner_fecha.setAdapter(null);
         }
         else{
             StringRequest stringRequest = new StringRequest(Request.Method.POST, ClassConection.URL_WEBB_SERVICES + "horas_disponibles_spinnes.php?almacen=" + sp_almacen + "&tipo=" + tipo_mvto + "&fecha_actual=" + fecha_comparativa + "&fecha_cita=" + fec_inis, new Response.Listener<String>() {
