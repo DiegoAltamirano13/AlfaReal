@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -54,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         et_usr = findViewById(R.id.usuario);
         et_password = findViewById(R.id.usuario_pwd);
         btn_aceptar = findViewById(R.id.btn_aceptar);
@@ -62,26 +62,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         spinner = findViewById(R.id.spinner_plaza);
 
-
-        et_password.addTextChangedListener(new TextWatcher() {
+        et_password.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                    String Tamanio_Caracteres = String.valueOf(editable);
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
                     plaza = new ArrayList<>();
                     listar();
+                    return true;
+                }else {
+                    return false;
+                }
             }
         });
-
         btn_aceptar.setOnClickListener(this);
 
         btn_aceptar.setText("Aceptar");
@@ -94,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         usr_usuario = et_usr.getText().toString();
         usr_password = et_password.getText().toString();
-        //Toast.makeText(getApplicationContext(), usr_usuario+usr_password, Toast.LENGTH_LONG).show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, ClassConection.URL_WEBB_SERVICES + "plazas_clientes.php?usr_usuario="+usr_usuario+"&usr_password="+usr_password, new Response.Listener<String>() {
             @Override

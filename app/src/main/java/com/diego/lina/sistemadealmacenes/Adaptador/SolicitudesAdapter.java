@@ -1,7 +1,6 @@
 package com.diego.lina.sistemadealmacenes.Adaptador;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -10,10 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -28,6 +28,8 @@ public class SolicitudesAdapter extends RecyclerView.Adapter<SolicitudesAdapter.
     RequestQueue requestQueue;
     Context context;
     Button info_Sol;
+    int bandera = 0;
+    String nu_sol;
 
     private View.OnClickListener listener;
 
@@ -49,7 +51,7 @@ public class SolicitudesAdapter extends RecyclerView.Adapter<SolicitudesAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SolicitudesHolder solicitudesHolder, int i) {
+    public void onBindViewHolder(@NonNull final SolicitudesHolder solicitudesHolder, int i) {
         solicitudesHolder.id_solicitud.setText(solicitudes_carga_descargas.get(i).getId_solicitud().toString());
         solicitudesHolder.d_fec_recepcion.setText(solicitudes_carga_descargas.get(i).getD_fec_recepcion().toString());
         String fecha_aprox_llegada = (solicitudes_carga_descargas.get(i).getD_fec_llegada_aprox().toString());
@@ -101,6 +103,22 @@ public class SolicitudesAdapter extends RecyclerView.Adapter<SolicitudesAdapter.
         }else {
             solicitudesHolder.d_fec_desp_vehic.setText(fecha_despedida_vehiculo);
         }
+        solicitudesHolder.vista.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 //Si es 0 es nuevo si es 1 es visible si es 2 es invisible
+                if (solicitudesHolder.vista2.getVisibility() == View.INVISIBLE){
+                    solicitudesHolder.vista2.setVisibility(View.VISIBLE);
+                    solicitudesHolder.vista2.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    /*CardView cw = new CardView(context);
+                    cw.setLayoutParams(new CardView.LayoutParams(CardView.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));*/
+                }else {
+                    solicitudesHolder.vista2.setVisibility(View.INVISIBLE);
+                    solicitudesHolder.vista2.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 0));
+                }
+
+            }
+        });
     }
 
     @Override
@@ -120,8 +138,11 @@ public class SolicitudesAdapter extends RecyclerView.Adapter<SolicitudesAdapter.
         ImageView truc_1, truck2, truck3, truck4, truck5;
         LinearLayout l_registrado, l_enrampado, l_carga, l_descarga, l_vehiculo_desp;
 
+        View vista;
+        CardView vista2;
         public SolicitudesHolder(View fragmento) {
             super(fragmento);
+
             id_solicitud = fragmento.findViewById(R.id.texto_Solicitud);
             v_nombre = fragmento.findViewById(R.id.texto_Almacen);
             v_descripcion = fragmento.findViewById(R.id.texto_Vehiculo);
@@ -146,6 +167,9 @@ public class SolicitudesAdapter extends RecyclerView.Adapter<SolicitudesAdapter.
             truck3 = fragmento.findViewById(R.id.truck_carga);
             truck4 = fragmento.findViewById(R.id.truck_fin_carga);
             truck5 = fragmento.findViewById(R.id.truck_despacho);
+
+            vista = fragmento.findViewById(R.id.card);
+            vista2 = fragmento.findViewById(R.id.cardview);
         }
     }
 }

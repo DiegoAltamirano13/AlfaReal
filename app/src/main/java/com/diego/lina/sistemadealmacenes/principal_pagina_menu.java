@@ -77,16 +77,7 @@ public class principal_pagina_menu extends AppCompatActivity
 
         /*Invocar listview expandible*/
         enableExpandableList();
-        /*Drawable myIcon = getResources().getDrawable(R.drawable.logout);
-        expListView.setGroupIndicator(myIcon);*/
-
-        /*long a = expListView.getFlatListPosition(1); // getExpandableListPosition(4);
-        Toast.makeText(getApplicationContext(),"Valor de AAA "+a,Toast.LENGTH_LONG).show();
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int width = metrics.widthPixels;
-        expListView.setIndicatorBounds(width - GetPixelFromDips(200), width - GetPixelFromDips(10));
-        */
+        expListView.setGroupIndicator(null);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -209,9 +200,6 @@ public class principal_pagina_menu extends AppCompatActivity
 
             @Override
             public void onGroupExpand(int groupPosition) {
-                /*Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Expanded",
-                        Toast.LENGTH_SHORT).show();*/
                 if (listDataHeader.get(groupPosition).equals("Cerrar sessión")){
                     SharedPreferences preferences = getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
@@ -270,6 +258,13 @@ public class principal_pagina_menu extends AppCompatActivity
                     transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                     transaction.addToBackStack(null);
                     transaction.replace(R.id.contenedor, reportes2Fragment);
+                    transaction.commit();
+                } else if (listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Rep. de Certificación desglosada")){
+                    Certificacion_reporte_desg certificacion_reporte_desg = new Certificacion_reporte_desg();
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    transaction.addToBackStack(null);
+                    transaction.replace(R.id.contenedor, certificacion_reporte_desg);
                     transaction.commit();
                 }
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

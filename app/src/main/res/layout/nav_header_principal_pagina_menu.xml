@@ -13,7 +13,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="170dp"
         android:orientation="horizontal">
         <ImageView
             android:id="@+id/imageView"
@@ -22,24 +22,27 @@
             android:layout_height="100dp"
             android:contentDescription="@string/nav_header_desc"
             android:paddingTop="25dp"
+            android:layout_gravity="left"
             android:src="@drawable/circlelogo" />
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="125dp"
                 android:orientation="horizontal">
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        android:textSize="14dp"
+                        android:textSize="15dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginTop="25dp"
@@ -55,7 +58,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        android:textSize="14dp"
+                        android:textSize="15dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:textAlignment="center"

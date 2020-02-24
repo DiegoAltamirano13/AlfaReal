@@ -93,6 +93,12 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle);
 
+        if (headerTitle.equals("Cerrar sessión")){
+            lblListHeader.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_sign_out_alt_solid, 0,0,0);
+        }
+        else {
+            lblListHeader.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_chevron_down_solid, 0,0,0);
+        }
         return convertView;
     }
 

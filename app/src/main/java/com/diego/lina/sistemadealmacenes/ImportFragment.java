@@ -252,7 +252,8 @@ public class ImportFragment extends Fragment{
                             if (fecha_comparativa.equals(fecha_datapicker) ){
                                android.support.v7.app.AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                 builder.setMessage("No hay disponibilidad de horas ").setTitle("Aviso")
-                                        .setPositiveButton("Aceptar", null)
+                                        .setPositiveButton("Aceptar" +
+                                                "", null)
                                         .create().show();
                             }
 

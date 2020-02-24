@@ -21,6 +21,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.TypefaceCompatApi26Impl;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +37,7 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -237,12 +239,19 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
         //Creacion de encabezados :D DIEGUITO
         String[] encabezado = {"SOLICITUD", "ALMACEN", "LLEGADA", "DESPACHADO", "ESTATUS", "VEHICULO", "PLACAS", "MERCANCIA", "CANTIDAD"};
 
+        //TableLayout.LayoutParams layoutParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
+        TableLayout.LayoutParams layoutParams = new TableLayout.LayoutParams(500, 500);
+        layoutParams.setMargins(6,6,6,6);
+        fila.setLayoutParams(layoutParams);
+        fila.setPadding(5,5,5,5);
+
         for (int x = 0; x < encabezado.length; x++){
             TextView tv_talla = new TextView(getActivity());
             tv_talla.setText(encabezado[x]);
-            tv_talla.setWidth(300);
-            tv_talla.setHeight(200);
+            tv_talla.setWidth(400);
+            tv_talla.setHeight(150);
             tv_talla.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+            tv_talla.setBackgroundResource(R.drawable.shape_table);
             fila.addView(tv_talla);
         }
         tableLayout.addView(fila,0);
@@ -291,53 +300,34 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
                 solicitudCD = new Solicitudes_Carga_Descarga();
                 JSONObject  jsonObject = null;
 
-                    jsonObject = jsonArray.getJSONObject(i);
-                solicitudCD.setId_solicitud(jsonObject.optString("ID_SOLICITUD"));
-                solicitudCD.setD_fec_recepcion(jsonObject.optString("D_FEC_RECEPCION"));
-                solicitudCD.setD_fec_llegada_aprox(jsonObject.optString("D_FEC_LLEGADA_APROX"));
-                solicitudCD.setD_fec_llegada_real(jsonObject.optString("D_FEC_LLEGADA_REAL"));
-                solicitudCD.setD_fec_ini_car_des(jsonObject.optString("D_FEC_INI_CAR_DES"));
-                solicitudCD.setD_fec_fin_car_des(jsonObject.optString("D_FEC_FIN_CAR_DES"));
-                solicitudCD.setD_fec_desp_vehic(jsonObject.optString("D_FEC_DESP_VEHIC"));
-                solicitudCD.setN_status(jsonObject.optString("N_STATUS"));
-                solicitudCD.setV_descripcion(jsonObject.optString("V_DESCRIPCION"));
-                solicitudCD.setPlacas(jsonObject.optString("PLACAS"));
-                solicitudCD.setPlacas2(jsonObject.optString("PLACAS_DOS"));
-                solicitudCD.setV_mercancia(jsonObject.optString("V_MERCANCIA"));
-                solicitudCD.setEvento(jsonObject.optString("EVENTO"));
-                solicitudCD.setChofer(jsonObject.optString("CHOFER"));
-                solicitudCD.setV_nombre(jsonObject.optString("V_NOMBRE"));
-                solicitudCD.setIid_almacen(jsonObject.optString("IID_ALMACEN"));
-                solicitudCD.setCantidad_ume(jsonObject.optString("N_CANTIDAD_UME"));
-                solicitudCD.setNombre_ume(jsonObject.optString("NOMBREUME"));
-                solicitudCD.setVid_usuario_cliente(jsonObject.optString("VID_USUARIO_CLIENTE"));
+                jsonObject = jsonArray.getJSONObject(i);
 
                     listaSolicitudes.add(solicitudCD);
-                    lp.setMargins(5,5,5,5);
-                    TableRow datosCarga = new TableRow(getActivity());
-                    datosCarga.setLayoutParams(lp);
+
+                TableRow datosCarga = new TableRow(getActivity());
+                TableLayout.LayoutParams layoutParams = new TableLayout.LayoutParams(500, 500);
+                datosCarga.setLayoutParams(layoutParams);
 
                     TextView id_solicitud = new TextView(getActivity());
                     id_solicitud.setText(jsonObject.optString("ID_SOLICITUD"));
-                    id_solicitud.setHeight(100);
-                    id_solicitud.setWidth(150);
+                    id_solicitud.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
                     id_solicitud.setTextColor(Color.WHITE);
                     id_solicitud.setBackgroundResource(R.drawable.shape_black);
-
-                        id_solicitud.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+                    id_solicitud.setWidth(100);
+                    id_solicitud.setHeight(70);
                     datosCarga.addView(id_solicitud);
 
                     TextView almacen = new TextView(getActivity());
                     almacen.setText(jsonObject.optString("V_NOMBRE"));
                     almacen.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-                    almacen.setHeight(200);
+                    almacen.setHeight(70);
 
                     datosCarga.addView(almacen);
 
                     TextView llegada = new TextView(getActivity());
                     llegada.setText(jsonObject.optString("D_FEC_RECEPCION"));
                     llegada.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-                    llegada.setHeight(200);
+                    llegada.setHeight(70);
                     datosCarga.addView(llegada);
 
                     TextView despachado = new TextView(getActivity());
@@ -384,25 +374,25 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
                 TextView vehiculo = new TextView(getActivity());
                 vehiculo.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
                 vehiculo.setText(jsonObject.optString("V_DESCRIPCION"));
-                vehiculo.setHeight(200);
+                vehiculo.setHeight(70);
                 datosCarga.addView(vehiculo);
 
                 TextView placas = new TextView(getActivity());
                 placas.setText(jsonObject.optString("PLACAS"));
                 placas.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-                placas.setHeight(200);
+                placas.setHeight(70);
                 datosCarga.addView(placas);
 
                 TextView mercancia = new TextView(getActivity());
                 mercancia.setText(jsonObject.optString("V_MERCANCIA"));
                 mercancia.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-                mercancia.setHeight(200);
+                mercancia.setHeight(70);
                 datosCarga.addView(mercancia);
 
                 TextView cantidad = new TextView(getActivity());
                 cantidad.setText(jsonObject.optString("N_CANTIDAD_UME"));
                 cantidad.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-                cantidad.setHeight(200);
+                cantidad.setHeight(70);
                 datosCarga.addView(cantidad);
                     tableLayout.addView(datosCarga);
                 }
