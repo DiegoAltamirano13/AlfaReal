@@ -85,7 +85,7 @@ public class VehiculosProgramados extends Fragment implements Response.Listener<
             @Override
             public void onResponse(JSONObject response) {
                 Solicitudes_Carga_Descarga listaSolicitud = null;
-
+                listaSolicitudes.clear();
                 try {
                     JSONArray responseJsonArray = response.getJSONArray("usuario");
                     StringBuilder formattedResult = new StringBuilder();

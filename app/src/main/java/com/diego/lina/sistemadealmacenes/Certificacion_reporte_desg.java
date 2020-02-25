@@ -287,7 +287,6 @@ public class Certificacion_reporte_desg extends Fragment {
                 }
                 else {
                     Toast.makeText(getContext(), "False" , Toast.LENGTH_LONG).show();
-                    //cardView.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 200));
                     CoordinatorLayout.LayoutParams coordinatorLayout = new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, 200);
                     coordinatorLayout.setMargins(25,25,25,25);
                     cardView.setLayoutParams(coordinatorLayout);

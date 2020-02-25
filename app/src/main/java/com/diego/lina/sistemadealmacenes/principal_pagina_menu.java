@@ -266,6 +266,20 @@ public class principal_pagina_menu extends AppCompatActivity
                     transaction.addToBackStack(null);
                     transaction.replace(R.id.contenedor, certificacion_reporte_desg);
                     transaction.commit();
+                } else if (listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Condensado")){
+                    InventarioFisico_Reporte inventarioFisico_reporte = new InventarioFisico_Reporte();
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    transaction.addToBackStack(null);
+                    transaction.replace(R.id.contenedor, inventarioFisico_reporte);
+                    transaction.commit();
+                }else if (listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Condensado completo")){
+                    InvetarioFisicoCondensado invetarioFisicoCondensado = new InvetarioFisicoCondensado();
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    transaction.addToBackStack(null);
+                    transaction.replace(R.id.contenedor, invetarioFisicoCondensado);
+                    transaction.commit();
                 }
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);

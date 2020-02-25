@@ -239,7 +239,6 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
         //Creacion de encabezados :D DIEGUITO
         String[] encabezado = {"SOLICITUD", "ALMACEN", "LLEGADA", "DESPACHADO", "ESTATUS", "VEHICULO", "PLACAS", "MERCANCIA", "CANTIDAD"};
 
-        //TableLayout.LayoutParams layoutParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
         TableLayout.LayoutParams layoutParams = new TableLayout.LayoutParams(500, 500);
         layoutParams.setMargins(6,6,6,6);
         fila.setLayoutParams(layoutParams);
@@ -249,7 +248,7 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
             TextView tv_talla = new TextView(getActivity());
             tv_talla.setText(encabezado[x]);
             tv_talla.setWidth(400);
-            tv_talla.setHeight(150);
+            tv_talla.setHeight(300);
             tv_talla.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
             tv_talla.setBackgroundResource(R.drawable.shape_table);
             fila.addView(tv_talla);
@@ -292,17 +291,14 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
 
     @Override
     public void onResponse(JSONObject response) {
-        Solicitudes_Carga_Descarga solicitudCD = null;
         JSONArray jsonArray = response.optJSONArray("usuario");
         try {
 
             for (int i = 0 ; i<jsonArray.length();i++){
-                solicitudCD = new Solicitudes_Carga_Descarga();
                 JSONObject  jsonObject = null;
 
                 jsonObject = jsonArray.getJSONObject(i);
 
-                    listaSolicitudes.add(solicitudCD);
 
                 TableRow datosCarga = new TableRow(getActivity());
                 TableLayout.LayoutParams layoutParams = new TableLayout.LayoutParams(500, 500);
