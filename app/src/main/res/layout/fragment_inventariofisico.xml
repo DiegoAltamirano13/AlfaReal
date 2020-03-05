@@ -90,10 +90,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pagina"
-            android:textSize="18dp"
+            android:textSize="20dp"
             android:id="@+id/textFila"
             android:visibility="invisible"
-            android:textColor="@color/black">
+            android:textColor="@color/black"
+            android:padding="5dp"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
+            android:gravity="center">
         </TextView>
             <ScrollView
                 android:layout_width="wrap_content"
@@ -119,7 +123,8 @@
         <HorizontalScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scrollbars="horizontal|vertical">
+            android:scrollbars="horizontal|vertical"
+            android:background="@color/md_white_1000">
             <TableLayout
                 android:id="@+id/tableLayoutPackingList2"
                 android:layout_width="wrap_content"

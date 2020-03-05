@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,8 +22,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -64,7 +67,7 @@ public class InvetarioFisicoCondensado extends Fragment implements Response.List
 
     EditText editTextNuSER;
 
-    //cREACION DE TABLA MAMALONA
+    //CREACION DE TABLA LAYOUT XML
     TableRow.LayoutParams layoutParamsTR = new TableRow.LayoutParams(500, 550);
     TableLayout tableLayoutInvFis;
     JsonObjectRequest jsonObjectRequest;
@@ -188,6 +191,7 @@ public class InvetarioFisicoCondensado extends Fragment implements Response.List
 
     private void cargarTablaInvFis() {
         tableLayoutInvFis.removeAllViews();
+        botonesPag.removeAllViews();
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Consultando...");
         progressDialog.show();
@@ -195,7 +199,6 @@ public class InvetarioFisicoCondensado extends Fragment implements Response.List
         filasEncabezado = new TableRow(getActivity());
         filasEncabezado.setLayoutParams(layoutParamsTR);
         TextView textViewEncabezado = new TextView(getContext());
-        filasEncabezado.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_table));
         String [] encabezado = {"N° DE PARTE", "DESC DE MERCANCIA", "ENTRADA", "SALIDA", "SALDO", "UNIDADES DE MEDIDA"};
 
         TableLayout.LayoutParams layoutParamsEncabezado = new TableLayout.LayoutParams(500, 550);
@@ -207,7 +210,7 @@ public class InvetarioFisicoCondensado extends Fragment implements Response.List
             TextView tvEncabezado = new TextView(getActivity());
             tvEncabezado.setText(encabezado[x]);
             tvEncabezado.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
-            tvEncabezado.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_table));
+            tvEncabezado.setPaintFlags(tvEncabezado.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
             tvEncabezado.setWidth(450);
             tvEncabezado.setHeight(200);
             filasEncabezado.addView(tvEncabezado);
@@ -253,7 +256,14 @@ public class InvetarioFisicoCondensado extends Fragment implements Response.List
 
             }
             int t;
-            for (t = 0; t<20; t++){
+            int for_cambio;
+            if (inventarioFisArray.size()< 20) {
+                for_cambio = inventarioFisArray.size();
+            }
+            else {
+                for_cambio = 20;
+            }
+            for (t = 0; t<for_cambio; t++){
                 TableRow bodyInvFis = new TableRow(getActivity());
                 TableLayout.LayoutParams tableBodyLayoutParams = new TableLayout.LayoutParams(500, 500);
                 bodyInvFis.setLayoutParams(tableBodyLayoutParams);
@@ -322,16 +332,26 @@ public class InvetarioFisicoCondensado extends Fragment implements Response.List
             Log.e("Valor de filas", String.valueOf(Math.ceil(jsonArray.length()/20.00)));
 
             for (int y = 0; y<numero_de_filas_entre20; y++){
-
                 TableRow btns = new TableRow(getActivity());
                 Button botonPaginado = new Button(getActivity());
                 botonPaginado.setText(String.valueOf(y+1));
+
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+                params.setMargins(12,12,12,12);
+                botonesPag.setLayoutParams(params);
+
                 botonPaginado.setId(y+1);
                 botonPaginado.setBackgroundResource(R.drawable.shape_circle_button);
+
                 botonPaginado.setOnClickListener(btnClick);
                 btns.addView(botonPaginado);
                 botonesPag.addView(btns);
-                fila_Texto.setVisibility(View.VISIBLE);
+                if (jsonArray.length()> 20) {
+                    fila_Texto.setVisibility(View.VISIBLE);
+                }
+                else {
+                    fila_Texto.setVisibility(View.INVISIBLE);
+                }
             }
 
             progressDialog.hide();
@@ -351,7 +371,6 @@ public class InvetarioFisicoCondensado extends Fragment implements Response.List
             filasEncabezado = new TableRow(getActivity());
             filasEncabezado.setLayoutParams(layoutParamsTR);
             TextView textViewEncabezado = new TextView(getContext());
-            filasEncabezado.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_table));
             String [] encabezado = {"N° DE PARTE", "DESC DE MERCANCIA", "ENTRADA", "SALIDA", "SALDO", "UNIDADES DE MEDIDA"};
 
             TableLayout.LayoutParams layoutParamsEncabezado = new TableLayout.LayoutParams(500, 550);
@@ -363,7 +382,7 @@ public class InvetarioFisicoCondensado extends Fragment implements Response.List
                 TextView tvEncabezado = new TextView(getActivity());
                 tvEncabezado.setText(encabezado[x]);
                 tvEncabezado.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
-                tvEncabezado.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_table));
+                tvEncabezado.setPaintFlags(tvEncabezado.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
                 tvEncabezado.setWidth(450);
                 tvEncabezado.setHeight(200);
                 filasEncabezado.addView(tvEncabezado);

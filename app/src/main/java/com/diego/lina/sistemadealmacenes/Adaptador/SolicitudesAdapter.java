@@ -59,19 +59,10 @@ public class SolicitudesAdapter extends RecyclerView.Adapter<SolicitudesAdapter.
         String fecha_inicio_descarga =(solicitudes_carga_descargas.get(i).getD_fec_ini_car_des().toString());
         String fecha_fin_descarga = (solicitudes_carga_descargas.get(i).getD_fec_fin_car_des().toString());
         String fecha_despedida_vehiculo = (solicitudes_carga_descargas.get(i).getD_fec_desp_vehic().toString());
-        //solicitudesHolder.n_status = (solicitudes_carga_descargas.get(i).getN_status().toString());
         solicitudesHolder.v_descripcion.setText(solicitudes_carga_descargas.get(i).getV_descripcion().toString());
         solicitudesHolder.placas.setText(solicitudes_carga_descargas.get(i).getPlacas().toString());
-        //solicitudesHolder.placas2 = (solicitudes_carga_descargas.get(i).getPlacas2().toString());
-        //solicitudesHolder.v_mercancia = (solicitudes_carga_descargas.get(i).getV_mercancia().toString());
-        //solicitudesHolder.evento = (solicitudes_carga_descargas.get(i).getEvento().toString());
         solicitudesHolder.chofer.setText(solicitudes_carga_descargas.get(i).getChofer().toString());
         solicitudesHolder.v_nombre.setText(solicitudes_carga_descargas.get(i).getV_nombre().toString());
-        //solicitudesHolder.iid_almacen = (solicitudes_carga_descargas.get(i).getIid_almacen().toString());
-        //solicitudesHolder.cantidad_ume = (solicitudes_carga_descargas.get(i).getCantidad_ume().toString());
-        //solicitudesHolder.nombre_ume = (solicitudes_carga_descargas.get(i).getNombre_ume().toString());
-        //solicitudesHolder.vid_usuario_cliente = (solicitudes_carga_descargas.get(i).getVid_usuario_cliente().toString());
-        //l_registrado, l_enrampado, l_carga, l_descarga, l_vehiculo_desp;
         if (fecha_llegada_real.equals("NO TIENE FECHA")){
            solicitudesHolder.d_fec_llegada_real.setText(fecha_aprox_llegada);
             solicitudesHolder.l_enrampado.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_circle_red));

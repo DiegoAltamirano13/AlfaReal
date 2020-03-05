@@ -259,7 +259,7 @@ public class principal_pagina_menu extends AppCompatActivity
                     transaction.addToBackStack(null);
                     transaction.replace(R.id.contenedor, reportes2Fragment);
                     transaction.commit();
-                } else if (listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Rep. de Certificación desglosada")){
+                } else if (listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Rep. de Certificación")){
                     Certificacion_reporte_desg certificacion_reporte_desg = new Certificacion_reporte_desg();
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                     transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
