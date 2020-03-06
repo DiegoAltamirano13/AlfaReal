@@ -33,9 +33,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="opacityPercent" value="95" />
-                            <entry key="outputName" value="ic_add_black_24dp" />
-                            <entry key="sourceFile" value="C:\Users\ARGO\Downloads\plus-solid.svg" />
+                            <entry key="outputName" value="ic_buscar" />
+                            <entry key="sourceFile" value="C:\Users\ARGO\Downloads\buscar.svg" />
                           </map>
                         </option>
                       </PersistentState>

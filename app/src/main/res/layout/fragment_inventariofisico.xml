@@ -27,11 +27,13 @@
                 android:padding="10dp"
                 android:layout_gravity="center">
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:textSize="16dp"
                     android:text="Filtros"
                     android:textStyle="bold"
+                    android:drawableLeft="@drawable/ic_buscar"
+                    android:drawablePadding="10dp"
                     android:layout_gravity="center"
                     android:gravity="center">
                 </TextView>

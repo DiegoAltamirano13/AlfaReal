@@ -296,8 +296,8 @@ public class principal_pagina_menu extends AppCompatActivity
         listDataHeader.add("Vehiculos");
         listDataHeader.add("Inventarios");
         listDataHeader.add("Certificados");
-        listDataHeader.add("Comercio Exterior");
-        listDataHeader.add("Facturación");
+        /*listDataHeader.add("Comercio Exterior");
+        listDataHeader.add("Facturación");*/
         listDataHeader.add("Cerrar sessión");
 
         // Adding child data
@@ -308,37 +308,37 @@ public class principal_pagina_menu extends AppCompatActivity
         vehiculo.add("Historico");
 
         List<String> top = new ArrayList<String>();
-        top.add("CD por producto");
+        /*top.add("CD por producto");
         top.add("Producto c/valor");
         top.add("Producto c/valor lote serie");
         top.add("Producto UME");
-        top.add("Producto UME y UMC");
+        top.add("Producto UME y UMC");*/
         top.add("Condensado");
         top.add("Condensado completo");
-        top.add("Detallado");
+        /*top.add("Detallado");
         top.add("Detallado completo");
         top.add("Productos por cd");
-        top.add("CD's vivos a una fecha");
+        top.add("CD's vivos a una fecha");*/
 
         List<String> mid = new ArrayList<String>();
         mid.add("Rep. de Certificación");
         mid.add("Rep. de Certificación desglosada");
 
-        List<String> bottom = new ArrayList<String>();
+        /*List<String> bottom = new ArrayList<String>();
         bottom.add("Cotización por pedimento");
-        bottom.add("Cotización por modelo");
+        bottom.add("Cotización por modelo");*/
 
-        List<String> facturacion = new ArrayList<String>();
-        facturacion.add("Antiguedad de saldos");
+        /*List<String> facturacion = new ArrayList<String>();
+        facturacion.add("Antiguedad de saldos");*/
 
         List<String> salir = new ArrayList<String>();
 
         listDataChild.put(listDataHeader.get(0), vehiculo); // Header, Child data
         listDataChild.put(listDataHeader.get(1), top);
         listDataChild.put(listDataHeader.get(2), mid);
-        listDataChild.put(listDataHeader.get(3), bottom);
-        listDataChild.put(listDataHeader.get(4), facturacion);
-        listDataChild.put(listDataHeader.get(5), salir);
+        /*listDataChild.put(listDataHeader.get(3), bottom);
+        listDataChild.put(listDataHeader.get(4), facturacion);*/
+        listDataChild.put(listDataHeader.get(3), salir);
     }
 
     public int GetPixelFromDips(float pixels) {

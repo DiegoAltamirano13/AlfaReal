@@ -44,6 +44,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -114,9 +115,9 @@ import static android.app.Activity.RESULT_CANCELED;
 
 public class ImportFragment extends Fragment{
     String plaza_c;
-    EditText n_solicitud, nombre_cliente, fecha_reg, estatus, plaza, eventos, lineatrans, placas, placas2, conductor,identificacion , mercancia, cantidad, observaciones;
+    EditText n_solicitud, nombre_cliente, fecha_reg, estatus, eventos, lineatrans, placas, placas2, conductor,identificacion , mercancia, cantidad, observaciones;
     ImageButton btn_ini, btn_hora;
-    private Spinner spinnerAlmacen, spinner_vehiculo, spinner_marca, spinner_unidad_medida, spinner_fecha;
+    private Spinner spinnerAlmacen, spinner_vehiculo, spinner_marca, spinner_unidad_medida, spinner_fecha, plaza;
     FloatingActionButton btn_registro;
     StringRequest stringRequest;
     TextView reg;
@@ -133,6 +134,7 @@ public class ImportFragment extends Fragment{
     ArrayList<String>tipoVehiculo;
     ArrayList<String>tipo_mercancia;
     ArrayList<String>hora;
+    ArrayList<String>plazas;
     //variables de url
     String sp_plaza;
     String sp_cliente_num;
@@ -170,7 +172,6 @@ public class ImportFragment extends Fragment{
         nombre_cliente = fragmento.findViewById(R.id.nombre_cliente);
         fecha_reg = fragmento.findViewById(R.id.fecha_reg);
         estatus = fragmento.findViewById(R.id.estatus);
-        plaza = fragmento.findViewById(R.id.plaza);
         //eventos = fragmento.findViewById(R.id.eventos);
         lineatrans = fragmento.findViewById(R.id.lineatrans);
         placas = fragmento.findViewById(R.id.placas);
@@ -186,7 +187,7 @@ public class ImportFragment extends Fragment{
 
         //Volley Library
         request = Volley.newRequestQueue(getContext());
-
+        plazas = new ArrayList<>();
         clientes = new ArrayList<>();
         marcasVehiculos = new ArrayList<>();
         tipoVehiculo = new ArrayList<>();
@@ -199,16 +200,29 @@ public class ImportFragment extends Fragment{
         spinner_fecha = fragmento.findViewById(R.id.spinner_fecha);
         carga = fragmento.findViewById(R.id.carga);
         descarga = fragmento.findViewById(R.id.descarga);
-        listar();
+        plaza = fragmento.findViewById(R.id.spinner_plaza);
+        listarPlaza();
         listar_marcaV();
         listar_TipoV();
         listar_TipoM();
 
+        plaza.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                clientes.clear();
+                spinnerAlmacen.setAdapter(null);
+                listar();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         String sp_n_cliente = preferences.getString("as_nombre", "No Cliente");
         nombre_cliente.setText(sp_n_cliente);
         estatus.setText("PREREGISTRO");
-        sp_plaza = preferences.getString("as_plaza", "No tienes plaza ");
-        plaza.setText(sp_plaza);
         sp_cliente_num = preferences.getString("as_cliente", "No Tiene Cliente");
         //En caso de dar click sobre el boton de registro
         btn_registro.setOnClickListener(new View.OnClickListener() {
@@ -292,6 +306,40 @@ public class ImportFragment extends Fragment{
         });
 
         return fragmento;
+    }
+
+    private void listarPlaza() {
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        SharedPreferences preferences = this.getActivity().getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
+        String usr_usuario = preferences.getString("as_usr_nombre", "No estas logueado");
+        String usr_password = preferences.getString("as_password", "No estas logueado");
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, ClassConection.URL_WEBB_SERVICES + "plazas_clientes.php?usr_usuario="+usr_usuario+"&usr_password="+usr_password, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray jsonArray = jsonObject.getJSONArray("usuario");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        String country = jsonObject1.getString("V_RAZON_SOCIAL");
+                        plazas.add(country);
+                    }
+                    plaza.setAdapter(new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, plazas));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        stringRequest.setRetryPolicy(policy);
+        requestQueue.add(stringRequest);
     }
 
     private void mostrar_Horas_Spinner() {
@@ -443,7 +491,8 @@ public class ImportFragment extends Fragment{
     public void listar() {
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         SharedPreferences preferences = this.getActivity().getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
-        sp_plaza = preferences.getString("as_plaza", "No tienes plaza ");
+        String sp_plaza, sp_cliente_num;
+        sp_plaza = plaza.getSelectedItem().toString();
         sp_cliente_num =preferences.getString("as_cliente", "No Tiene Cliente");
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ClassConection.URL_WEBB_SERVICES + "almacen_cliente.php?plaza="+sp_plaza+"&cliente="+sp_cliente_num, new Response.Listener<String>() {
             @Override
@@ -477,7 +526,6 @@ public class ImportFragment extends Fragment{
     private void validarCampos() {
         String nombre_clientes = nombre_cliente.getText().toString();
         String estatuss = estatus.getText().toString();
-        String plazas = plaza.getText().toString();
         String lineatranss = lineatrans.getText().toString();
         String placass = placas.getText().toString();
         String placas2s= placas2.getText().toString();
@@ -514,7 +562,6 @@ public class ImportFragment extends Fragment{
 
         boolean b = validar_desc_merca(nombre_clientes);
         boolean d = validar_desc_merca(estatuss);
-        boolean e = validar_desc_merca(plazas);
         boolean g = validar_desc_merca(lineatranss);
         boolean h = validar_desc_merca(placass);
         boolean j = validar_desc_merca(conductors);
@@ -527,7 +574,7 @@ public class ImportFragment extends Fragment{
         boolean s = validar_desc_merca(sp_unidad_medida);
         boolean t = validar_desc_merca(tipo_mvto);
 
-        if ( b && d && e && g && h && j && k && l && m && o && q && r && s && t){
+        if ( b && d  && g && h && j && k && l && m && o && q && r && s && t){
             cargarService();
         }
         else {
@@ -564,7 +611,6 @@ public class ImportFragment extends Fragment{
     private void cargarService() {
         final String nombre_clientes = nombre_cliente.getText().toString();
         final String estatuss = estatus.getText().toString();
-        final String plazas = plaza.getText().toString();
         final String lineatranss = lineatrans.getText().toString();
         final String placass = placas.getText().toString();
         final String placas2s= placas2.getText().toString();
@@ -573,7 +619,7 @@ public class ImportFragment extends Fragment{
         final String mercancias= mercancia.getText().toString();
         final String cantidads = cantidad.getText().toString();
 
-        if (nombre_clientes.length() == 0  || estatuss.length() == 0 || plazas.length() == 0  || lineatranss.length() == 0 || placass.length() == 0  || conductors.length() == 0 || identificacions.length() == 0  || mercancias.length() == 0  || cantidads.length() == 0){
+        if (nombre_clientes.length() == 0  || estatuss.length() == 0 || lineatranss.length() == 0 || placass.length() == 0  || conductors.length() == 0 || identificacions.length() == 0  || mercancias.length() == 0  || cantidads.length() == 0){
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext());
             builder.setMessage("Es necesario llenar todos los campos").setNegativeButton("Aceptar", null)
                     .create().show();
@@ -612,7 +658,7 @@ public class ImportFragment extends Fragment{
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     SharedPreferences preferences = getActivity().getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
-                     String nombreplaza = plaza.getText().toString();
+                     String nombreplaza = plaza.getSelectedItem().toString();
                      String nombrealmacen = spinnerAlmacen.getSelectedItem().toString();
                      String nombrecliente = nombre_cliente.getText().toString();
                         String tipo;

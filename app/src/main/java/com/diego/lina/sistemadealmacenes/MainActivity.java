@@ -60,14 +60,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_aceptar = findViewById(R.id.btn_aceptar);
         final Context context = getApplicationContext();
 
-        spinner = findViewById(R.id.spinner_plaza);
 
         et_password.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
                     plaza = new ArrayList<>();
-                    listar();
                     return true;
                 }else {
                     return false;
@@ -82,38 +80,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cargarPreferencias();
     }
 
-    private void listar() {
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        usr_usuario = et_usr.getText().toString();
-        usr_password = et_password.getText().toString();
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, ClassConection.URL_WEBB_SERVICES + "plazas_clientes.php?usr_usuario="+usr_usuario+"&usr_password="+usr_password, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONArray jsonArray = jsonObject.getJSONArray("usuario");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        String country = jsonObject1.getString("V_RAZON_SOCIAL");
-                        plaza.add(country);
-                    }
-                    spinner.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, plaza));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        requestQueue.add(stringRequest);
-    }
 
     private void cargarPreferencias() {
         SharedPreferences preferences = getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
@@ -156,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             String as_cliente = jsonResponse.getString("as_cliente");
                             String as_nombre = jsonResponse.getString("as_nombre");
                             String as_i_adm = jsonResponse.getString("as_i_adm");
-                            String as_plaza = spinner.getSelectedItem().toString();
                             //as_access = jsonResponse.getString("as_access");
                             Intent intent = new Intent(MainActivity.this, principal_pagina_menu.class);
                             intent.putExtra("as_usr_nombre", as_usr_nombre);
@@ -167,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             editor.putString("as_nombre", as_nombre );
                             editor.putString("as_i_adm", as_i_adm );
                             editor.putString("as_access", Integer.toString(as_access));
-                            editor.putString("as_plaza", as_plaza);
                             editor.commit();
                             MainActivity.this.startActivity(intent);
                         } else {

@@ -52,7 +52,7 @@ public class CertDesglozadaAdapter extends RecyclerView.Adapter<CertDesglozadaAd
         if (i == 0){
             Log.e("I es mayor que 1 " , "CUIDADO ");
             certDesglozadaHolder.filasEncabezado = new TableRow(context);
-            String [] cabezal =  {"CERTIF", "VALOR", "CANTIDAD UME", "UME",  "UMC X UME", "UMC", "TONELADAS"};
+            String [] cabezal =  {"CERTIF.", "VALOR", "CANTIDAD UME", "UME",  "UMC X UME", "UMC", "TONELADAS"};
 
             TableLayout.LayoutParams layoutParamsEncabezado = new TableLayout.LayoutParams(500, 550);
             layoutParamsEncabezado.setMargins(6,6,6,6);
