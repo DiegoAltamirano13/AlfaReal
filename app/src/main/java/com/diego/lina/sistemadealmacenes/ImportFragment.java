@@ -369,6 +369,7 @@ public class ImportFragment extends Fragment{
                 spinner_fecha.setAdapter(null);
         }
         else{
+            String query_horas = ClassConection.URL_WEBB_SERVICES + "horas_disponibles_spinnes.php?almacen=" + sp_almacen + "&tipo=" + tipo_mvto + "&fecha_actual=" + fecha_comparativa + "&fecha_cita=" + fec_inis;
             StringRequest stringRequest = new StringRequest(Request.Method.POST, ClassConection.URL_WEBB_SERVICES + "horas_disponibles_spinnes.php?almacen=" + sp_almacen + "&tipo=" + tipo_mvto + "&fecha_actual=" + fecha_comparativa + "&fecha_cita=" + fec_inis, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {

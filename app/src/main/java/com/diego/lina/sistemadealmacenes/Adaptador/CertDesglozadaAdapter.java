@@ -70,7 +70,42 @@ public class CertDesglozadaAdapter extends RecyclerView.Adapter<CertDesglozadaAd
             }
             certDesglozadaHolder.tableLayoutCerDesg.addView(certDesglozadaHolder.filasEncabezado, 0);
 
+            int almacen = 0;
+
             for (int z = 0; z < certificacionNormals.size(); z++){
+
+                /**GENERAR POR TODOS LOS ALMACENES**/
+                if (almacen != certificacionNormals.get(z).getIID_ALMACEN()){
+                    TableRow encabezadoIni = new TableRow(context);
+                    TableLayout.LayoutParams tableBD = new TableLayout.LayoutParams(200, 200);
+                    encabezadoIni.setLayoutParams(tableBD);
+                    encabezadoIni.setPadding(10,10,10,10);
+                    TextView textViewAlm = new TextView(context);
+                    textViewAlm.setText("ALMACEN");
+                    textViewAlm.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    textViewAlm.setTextColor(Color.BLACK);
+                    textViewAlm.setWidth(100);
+                    textViewAlm.setHeight(70);
+                    encabezadoIni.addView(textViewAlm);
+
+                    TextView textViewIIDAlm = new TextView(context);
+                    textViewIIDAlm.setText(String.valueOf(certificacionNormals.get(z).getIID_ALMACEN()));
+                    textViewIIDAlm.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    textViewIIDAlm.setTextColor(Color.BLACK);
+                    textViewIIDAlm.setWidth(100);
+                    textViewIIDAlm.setHeight(70);
+                    encabezadoIni.addView(textViewIIDAlm);
+
+                    TextView textNombreAlmacen = new TextView(context);
+                    textNombreAlmacen.setText(certificacionNormals.get(z).getV_RAZON_SOCIAL());
+                    textNombreAlmacen.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    textNombreAlmacen.setTextColor(Color.BLACK);
+                    textNombreAlmacen.setWidth(100);
+                    textNombreAlmacen.setHeight(70);
+                    encabezadoIni.addView(textNombreAlmacen);
+
+                }
+
                 Log.e("TAMAÑO DE ARRAY", String.valueOf(certificacionNormals.size()));
                 TableRow bodyInvFis = new TableRow(context);
                 TableLayout.LayoutParams tableBodyLayoutParams = new TableLayout.LayoutParams(500, 500);

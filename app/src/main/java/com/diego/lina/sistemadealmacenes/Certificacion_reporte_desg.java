@@ -73,8 +73,6 @@ public class Certificacion_reporte_desg extends Fragment {
     //Array Spinner area
     Spinner regimenSpinner;
     //Raadio buttons tipo cert
-    RadioButton rb_convenio, rb_contrato;
-    RadioGroup rg_convenio_contrato;
 
     RadioGroup rg_todos, rg_N, rg_S;
     RadioGroup rg_Extras;
@@ -129,10 +127,6 @@ public class Certificacion_reporte_desg extends Fragment {
         //Llenado de spinner de plaza
         llenar_spinner_plaza();
 
-        id_almacen = fragment.findViewById(R.id.nAlmacen);
-        nombre_almacen = fragment.findViewById(R.id.nameAlmacen);
-        tipo_cert = fragment.findViewById(R.id.nTipo);
-        cardView2 = fragment.findViewById(R.id.infoCert);
         plazaCert.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -151,10 +145,7 @@ public class Certificacion_reporte_desg extends Fragment {
         monedaSpinner = fragment.findViewById(R.id.spinnerMoneda);
         llenarSpinnerMoneda();
 
-        rb_convenio = fragment.findViewById(R.id.rb_convenio);
-        rb_contrato = fragment.findViewById(R.id.rb_contrato);
 
-        rg_convenio_contrato = fragment.findViewById(R.id.tipo_certificacion_rb);
 
         rg_todos = fragment.findViewById(R.id.rg_Todos);
         rg_N = fragment.findViewById(R.id.groupRbN);
@@ -354,20 +345,6 @@ public class Certificacion_reporte_desg extends Fragment {
 
         //Recuperar el valor de rg tipo convenio / contrato
         String textTipo = "";
-        if (rg_convenio_contrato.getCheckedRadioButtonId() == -1){
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage("Es necesario elegir CONVENIO ó CONTRATO").setTitle("ERROR").setPositiveButton("Aceptar", null);
-            AlertDialog dialog = builder.create();
-            dialog.show();
-            return;
-        }
-        else {
-            int radioButtonTipoId = rg_convenio_contrato.getCheckedRadioButtonId();
-            View radioButtoTipo = rg_convenio_contrato.findViewById(radioButtonTipoId);
-            int indiceTipo = rg_convenio_contrato.indexOfChild(radioButtoTipo);
-            RadioButton rbtipo = (RadioButton) rg_convenio_contrato.getChildAt(indiceTipo);
-            textTipo = rbtipo.getText().toString();
-        }
 
         //Recupera el valor de moneda y regimen
         String moneda = monedaSpinner.getSelectedItem().toString();
@@ -416,10 +393,10 @@ public class Certificacion_reporte_desg extends Fragment {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
 
-        Log.e("Nada en todos", nombreCliente + " " + plaza + " " + almacen + " " + textTipo + " " + moneda +  " " + regimen + " " + primeraFecha + " " + ultimaFecha + " " + textTipoCD);
-        //Enviar datos
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        final String query = ClassConection.URL_WEBB_SERVICES+"cert_Desglozada.php?cliente=" + nombreCliente + "&plaza=" + plaza + "&almacen=" + almacen + "&tipo=" + textTipo + "&moneda=" + moneda + "&regimen=" + regimen + "&primeraFe=" + primeraFecha + "&ultimaFe=" + ultimaFecha + "&tipocd=" + textTipoCD;
+
+        final String query = "http://187.141.70.76/android_app/cert_Desglozada.php?cliente=" + nombreCliente + "&plaza=" + plaza + "&almacen=" + almacen + "&moneda=" + moneda + "&regimen=" + regimen + "&primeraFe=" + primeraFecha + "&ultimaFe=" + ultimaFecha + "&tipocd=" + textTipoCD;
+        Log.e("URL",  query);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, query, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -456,42 +433,8 @@ public class Certificacion_reporte_desg extends Fragment {
 
                         }
                     }
-                    if (certificacionNormalArrayList.size() > 0){
-
-                        id_almacen.setText(String.valueOf(certificacionNormalArrayList.get(0).getIID_ALMACEN()));
-                        nombre_almacen.setText(certificacionNormalArrayList.get(0).getV_RAZON_SOCIAL().toString());
-
-                        switch (certificacionNormalArrayList.get(0).getS_TIPO_ALMACEN().toString()){
-                            case "2":
-                                tipo_cert.setText("NACIONAL");
-                                break;
-                            case "3":
-                                tipo_cert.setText("FISCAL");
-                                break;
-                            case "5":
-                                tipo_cert.setText("HABILITADO");
-                                break;
-                            case "6":
-                                tipo_cert.setText("NACIONAL / FISCAL");
-                                break;
-                            case "10":
-                                tipo_cert.setText("NACIONAL/HABILITADO");
-                                break;
-                            case "15":
-                                tipo_cert.setText("FISCAL/HABILITADO");
-                                break;
-                            case "30":
-                                tipo_cert.setText("NACIONAL/FISCAL/HABILITADO");
-                                break;
-                        }
-                        cardView2.setVisibility(View.VISIBLE);
-                        /*CONTENIDO TABLA */
-                        CertDesglozadaAdapter certDesglozadaAdapter = new CertDesglozadaAdapter(certificacionNormalArrayList, getContext());
-                        recycler.setAdapter(certDesglozadaAdapter);
-                    }
-                    else {
-                        cardView2.setVisibility(View.INVISIBLE);
-                    }
+                    final CertDesglozadaAdapter certDesglozadaAdapter = new CertDesglozadaAdapter(certificacionNormalArrayList, getContext());
+                    recycler.setAdapter(certDesglozadaAdapter);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -506,11 +449,28 @@ public class Certificacion_reporte_desg extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.e("ERROR","Error Response"+  error.getMessage());
                 if (progressDialog == null){
 
                 }else{
                     progressDialog.hide();
                 }
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 50000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
             }
         });
         requestQueue.add(jsonObjectRequest);
@@ -532,9 +492,12 @@ public class Certificacion_reporte_desg extends Fragment {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray jsonArray = jsonObject.getJSONArray("usuario");
+                    String country;
+                    country = "ALL";
+                    plazaArrayCC.add(country);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        String country = jsonObject1.getString("V_RAZON_SOCIAL");
+                        country = jsonObject1.getString("V_RAZON_SOCIAL");
                         plazaArrayCC.add(country);
                     }
                     plazaCert.setAdapter(new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, plazaArrayCC));
@@ -599,20 +562,28 @@ public class Certificacion_reporte_desg extends Fragment {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray jsonArray = jsonObject.getJSONArray("usuario");
+                    String country = "ALL";
+                    almacenArrCC.add(country);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        String country = jsonObject1.getString("V_NOMBRE");
+                        country = jsonObject1.getString("V_NOMBRE");
                         almacenArrCC.add(country);
                     }
                     almacenCert.setAdapter(new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, almacenArrCC));
                     almacenCert.setAdapter(new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, almacenArrCC));
                 } catch (JSONException e) {
+                    String country = "ALL";
+                    almacenArrCC.add(country);
+                    almacenCert.setAdapter(new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, almacenArrCC));
                     e.printStackTrace();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                String country = "ALL";
+                almacenArrCC.add(country);
+                almacenCert.setAdapter(new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, almacenArrCC));
                 error.printStackTrace();
             }
         });
