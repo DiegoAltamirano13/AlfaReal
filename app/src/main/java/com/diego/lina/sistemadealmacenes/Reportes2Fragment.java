@@ -254,6 +254,7 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
             public void onClick(View v) {
 
                 listaSolicitudes.clear();
+                tableLayout.removeAllViews();
 
                 ConnectivityManager conn = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = conn.getActiveNetworkInfo();
@@ -281,36 +282,8 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
             img_no_conError.setVisibility(View.VISIBLE);
         }
         adapter = new ImagenesAdapter(listaSolicitudes, getContext());
-
-        //Diegui
-        fila = new TableRow(getActivity());
-        fila.setLayoutParams(lp);
-        TextView text = new TextView(getContext());
-
-        fila.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_table));
         tableLayout = fragment.findViewById(R.id.tableLayoutPackingList);
-        tableLayout.setVisibility(View.INVISIBLE);
         horizontalScrollView = fragment.findViewById(R.id.hscroll);
-        horizontalScrollView.setVisibility(View.INVISIBLE);
-        //Creacion de encabezados :D DIEGUITO
-        String[] encabezado = {"SOLICITUD", "ALMACEN", "LLEGADA", "DESPACHADO", "ESTATUS", "VEHICULO", "PLACAS", "MERCANCIA", "CANTIDAD"};
-
-        TableLayout.LayoutParams layoutParams = new TableLayout.LayoutParams(500, 500);
-        layoutParams.setMargins(6,6,6,6);
-        fila.setLayoutParams(layoutParams);
-        fila.setPadding(5,5,5,5);
-
-        for (int x = 0; x < encabezado.length; x++){
-            TextView tv_talla = new TextView(getActivity());
-            tv_talla.setText(encabezado[x]);
-            tv_talla.setWidth(400);
-            tv_talla.setHeight(300);
-            tv_talla.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-            tv_talla.setBackgroundResource(R.drawable.shape_table);
-            fila.addView(tv_talla);
-        }
-        tableLayout.addView(fila,0);
-
         return fragment;
 
     }
@@ -401,6 +374,33 @@ public class Reportes2Fragment extends Fragment implements Response.Listener<JSO
     @Override
     public void onResponse(JSONObject response) {
         JSONArray jsonArray = response.optJSONArray("usuario");
+
+        //Diegui
+        fila = new TableRow(getActivity());
+        fila.setLayoutParams(lp);
+        TextView text = new TextView(getContext());
+
+        fila.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_table));
+        tableLayout.setVisibility(View.INVISIBLE);
+        horizontalScrollView.setVisibility(View.INVISIBLE);
+        //Creacion de encabezados :D DIEGUITO
+        String[] encabezado = {"SOLICITUD", "ALMACEN", "LLEGADA", "DESPACHADO", "ESTATUS", "VEHICULO", "PLACAS", "MERCANCIA", "CANTIDAD"};
+
+        TableLayout.LayoutParams layoutParams2 = new TableLayout.LayoutParams(500, 500);
+        layoutParams2.setMargins(6,6,6,6);
+        fila.setLayoutParams(layoutParams2);
+        fila.setPadding(5,5,5,5);
+
+        for (int x = 0; x < encabezado.length; x++){
+            TextView tv_talla = new TextView(getActivity());
+            tv_talla.setText(encabezado[x]);
+            tv_talla.setWidth(400);
+            tv_talla.setHeight(300);
+            tv_talla.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+            tv_talla.setBackgroundResource(R.drawable.shape_table);
+            fila.addView(tv_talla);
+        }
+        tableLayout.addView(fila,0);
         try {
 
             for (int i = 0 ; i<jsonArray.length();i++){

@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -51,33 +52,90 @@ public class CertDesglozadaAdapter extends RecyclerView.Adapter<CertDesglozadaAd
 
         if (i == 0){
             Log.e("I es mayor que 1 " , "CUIDADO ");
-            certDesglozadaHolder.filasEncabezado = new TableRow(context);
-            String [] cabezal =  {"CERTIF.", "VALOR", "CANTIDAD UME", "UME",  "UMC X UME", "UMC", "TONELADAS"};
-
-            TableLayout.LayoutParams layoutParamsEncabezado = new TableLayout.LayoutParams(500, 550);
-            layoutParamsEncabezado.setMargins(6,6,6,6);
-            certDesglozadaHolder.filasEncabezado.setLayoutParams(layoutParamsEncabezado);
-            certDesglozadaHolder.filasEncabezado.setPadding(5,5,5,5);
-
-            for (int x = 0; x < cabezal.length; x++){
-                TextView tvEncabezado = new TextView(context);
-                tvEncabezado.setText(cabezal[x]);
-                tvEncabezado.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
-                tvEncabezado.setWidth(450);
-                tvEncabezado.setHeight(200);
-                tvEncabezado.setPaintFlags(tvEncabezado.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
-                certDesglozadaHolder.filasEncabezado.addView(tvEncabezado);
-            }
-            certDesglozadaHolder.tableLayoutCerDesg.addView(certDesglozadaHolder.filasEncabezado, 0);
 
             int almacen = 0;
+            double valort = 0.00;
+            double cantidad_umeva = 0.00;
+            double tonelaje = 0.00;
 
             for (int z = 0; z < certificacionNormals.size(); z++){
 
+                /**REVISA TODO CORRECTO*/
+                if (almacen != 0 && almacen != certificacionNormals.get(z).getIID_ALMACEN()){
+                    Log.e("Valores ", String.format("%, .2f", valort) + "   " + String.format("%, .2f", cantidad_umeva) + "    " + String.format("%, .2f", tonelaje));
+
+                    TableRow encabezadoIni = new TableRow(context);
+                    TableLayout.LayoutParams tableBD = new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 200);
+                    encabezadoIni.setLayoutParams(tableBD);
+                    encabezadoIni.setPadding(10,10,10,10);
+                    TextView textViewAlm = new TextView(context);
+                    textViewAlm.setText("");
+                    textViewAlm.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    textViewAlm.setTextColor(Color.BLACK);
+                    textViewAlm.setWidth(100);
+                    textViewAlm.setHeight(70);
+                    encabezadoIni.addView(textViewAlm);
+
+                    TextView textViewIIDAlm = new TextView(context);
+                    textViewIIDAlm.setText(String.format("%, .2f", valort));
+                    textViewIIDAlm.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    textViewIIDAlm.setTextColor(Color.BLACK);
+                    textViewIIDAlm.setWidth(100);
+                    textViewIIDAlm.setHeight(70);
+                    encabezadoIni.addView(textViewIIDAlm);
+
+                    TextView textNombreAlmacen = new TextView(context);
+                    textNombreAlmacen.setText(String.format("%, .2f",cantidad_umeva));
+                    textNombreAlmacen.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    textNombreAlmacen.setTextColor(Color.BLACK);
+                    textNombreAlmacen.setWidth(100);
+                    textNombreAlmacen.setHeight(70);
+                    encabezadoIni.addView(textNombreAlmacen);
+
+                    TextView txtTipo = new TextView(context);
+                    txtTipo.setText("");
+                    txtTipo.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    txtTipo.setTextColor(Color.BLACK);
+                    txtTipo.setWidth(100);
+                    txtTipo.setHeight(70);
+                    encabezadoIni.addView(txtTipo);
+
+                    TextView txtTipUMo = new TextView(context);
+                    txtTipUMo.setText("");
+                    txtTipUMo.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    txtTipUMo.setTextColor(Color.BLACK);
+                    txtTipUMo.setWidth(100);
+                    txtTipUMo.setHeight(70);
+                    encabezadoIni.addView(txtTipUMo);
+
+                    TextView txtTipUMo1 = new TextView(context);
+                    txtTipUMo1.setText("");
+                    txtTipUMo1.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    txtTipUMo1.setTextColor(Color.BLACK);
+                    txtTipUMo1.setWidth(100);
+                    txtTipUMo1.setHeight(70);
+                    encabezadoIni.addView(txtTipUMo1);
+
+                    TextView tone = new TextView(context);
+                    tone.setText(String.format("%, .2f",tonelaje));
+                    tone.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    tone.setTextColor(Color.BLACK);
+                    tone.setWidth(100);
+                    tone.setHeight(70);
+                    encabezadoIni.addView(tone);
+                    encabezadoIni.setBackgroundResource(R.drawable.shape_table_total);
+                    certDesglozadaHolder.tableLayoutCerDesg.addView(encabezadoIni);
+
+                    valort = 0;
+                    cantidad_umeva = 0;
+                    tonelaje = 0;
+                }
+
                 /**GENERAR POR TODOS LOS ALMACENES**/
                 if (almacen != certificacionNormals.get(z).getIID_ALMACEN()){
+
                     TableRow encabezadoIni = new TableRow(context);
-                    TableLayout.LayoutParams tableBD = new TableLayout.LayoutParams(200, 200);
+                    TableLayout.LayoutParams tableBD = new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 200);
                     encabezadoIni.setLayoutParams(tableBD);
                     encabezadoIni.setPadding(10,10,10,10);
                     TextView textViewAlm = new TextView(context);
@@ -97,12 +155,114 @@ public class CertDesglozadaAdapter extends RecyclerView.Adapter<CertDesglozadaAd
                     encabezadoIni.addView(textViewIIDAlm);
 
                     TextView textNombreAlmacen = new TextView(context);
-                    textNombreAlmacen.setText(certificacionNormals.get(z).getV_RAZON_SOCIAL());
+                    textNombreAlmacen.setText(certificacionNormals.get(z).getV_DIRECCION());
                     textNombreAlmacen.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
                     textNombreAlmacen.setTextColor(Color.BLACK);
-                    textNombreAlmacen.setWidth(100);
+                    textNombreAlmacen.setWidth(1100);
                     textNombreAlmacen.setHeight(70);
                     encabezadoIni.addView(textNombreAlmacen);
+
+                    TextView txtTipo = new TextView(context);
+
+                    switch (certificacionNormals.get(z).getS_TIPO_ALMACEN()){
+                        case "2":
+                            txtTipo.setText("NACIONAL");
+                            break;
+                        case "3":
+                            txtTipo.setText("FISCAL");
+                            break;
+                        case  "5":
+                            txtTipo.setText("HABILITADO");
+                            break;
+                        case "6":
+                            txtTipo.setText("NACIONAL/FISCAL");
+                            break;
+                        case "15":
+                            txtTipo.setText("FISCAL/HABILITADO");
+                            break;
+                        default:
+                            txtTipo.setText("TIPO UNDEFINED");
+                            break;
+                    }
+
+                    txtTipo.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    txtTipo.setTextColor(Color.BLACK);
+                    txtTipo.setWidth(100);
+                    txtTipo.setHeight(70);
+
+                    encabezadoIni.addView(txtTipo);
+
+                    encabezadoIni.setBackgroundResource(R.drawable.shape_table);
+
+                    certDesglozadaHolder.tableLayoutCerDesg.addView(encabezadoIni);
+                    almacen = certificacionNormals.get(z).getIID_ALMACEN();
+
+                    //Sub encabezado papi
+                    TableRow encabezadoIni2 = new TableRow(context);
+                    TableLayout.LayoutParams tableBD2 = new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 200);
+                    encabezadoIni2.setLayoutParams(tableBD2);
+                    encabezadoIni2.setPadding(10,10,10,10);
+                    TextView CERTIFICADO = new TextView(context);
+                    CERTIFICADO.setText("CERTIFICADO");
+                    CERTIFICADO.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    CERTIFICADO.setTextColor(Color.BLACK);
+                    CERTIFICADO.setWidth(450);
+                    CERTIFICADO.setHeight(200);
+                    encabezadoIni2.addView(CERTIFICADO);
+
+                    TextView VALOR = new TextView(context);
+                    VALOR.setText("VALOR");
+                    VALOR.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    VALOR.setTextColor(Color.BLACK);
+                    VALOR.setWidth(450);
+                    VALOR.setHeight(200);
+                    encabezadoIni2.addView(VALOR);
+
+                    TextView CANTIDADUME = new TextView(context);
+                    CANTIDADUME.setText("CANTIDAD UME");
+                    CANTIDADUME.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    CANTIDADUME.setTextColor(Color.BLACK);
+                    CANTIDADUME.setWidth(450);
+                    CANTIDADUME.setHeight(200);
+                    encabezadoIni2.addView(CANTIDADUME);
+
+                    TextView UME = new TextView(context);
+                    UME.setText("UME");
+                    UME.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    UME.setTextColor(Color.BLACK);
+                    UME.setWidth(450);
+                    UME.setHeight(200);
+                    encabezadoIni2.addView(UME);
+
+                    TextView UMEXUMC = new TextView(context);
+                    UMEXUMC.setText("UMEXUMC");
+                    UMEXUMC.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    UMEXUMC.setTextColor(Color.BLACK);
+                    UMEXUMC.setWidth(450);
+                    UMEXUMC.setHeight(200);
+                    encabezadoIni2.addView(UMEXUMC);
+
+                    TextView UMC = new TextView(context);
+                    UMC.setText("UMC");
+                    UMC.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    UMC.setTextColor(Color.BLACK);
+                    UMC.setWidth(450);
+                    UMC.setHeight(200);
+                    encabezadoIni2.addView(UMC);
+
+
+                    TextView TONELADAS = new TextView(context);
+                    TONELADAS.setText("TONELADAS");
+                    TONELADAS.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    TONELADAS.setTextColor(Color.BLACK);
+                    TONELADAS.setWidth(450);
+                    TONELADAS.setHeight(200);
+                    encabezadoIni2.addView(TONELADAS);
+
+
+
+                    certDesglozadaHolder.tableLayoutCerDesg.addView(encabezadoIni2);
+                    almacen = certificacionNormals.get(z).getIID_ALMACEN();
 
                 }
 
@@ -134,6 +294,9 @@ public class CertDesglozadaAdapter extends RecyclerView.Adapter<CertDesglozadaAd
                 valor.setTextColor(Color.BLACK);
                 bodyInvFis.addView(valor);
 
+                //Prueba valor RT
+                valort = valort + numCantidadValor;
+
                 String cantidadUme = certificacionNormals.get(z).getN_CANT_BULTOS().toString();
                 Double cantidadUmeForm = Double.parseDouble(cantidadUme);
                 String cantidadUmeForma = String.format("%, .2f", cantidadUmeForm);
@@ -146,6 +309,8 @@ public class CertDesglozadaAdapter extends RecyclerView.Adapter<CertDesglozadaAd
                 cantidad_ume.setTextColor(Color.BLACK);
                 bodyInvFis.addView(cantidad_ume);
 
+                //Valor de cantidad UME FORM
+                cantidad_umeva = cantidad_umeva + cantidadUmeForm;
 
                 TextView ume = new TextView(context);
                 ume.setText(certificacionNormals.get(z).getV_UME());
@@ -190,17 +355,87 @@ public class CertDesglozadaAdapter extends RecyclerView.Adapter<CertDesglozadaAd
                 ton.setTextColor(Color.BLACK);
                 bodyInvFis.addView(ton);
 
+                tonelaje = tonelaje  + cantidad_TonsForm;
+
                 certDesglozadaHolder.tableLayoutCerDesg.addView(bodyInvFis);
 
+                if (certificacionNormals.size() -1 == z){
+                    Log.e("Valores2 final  ", String.format("%, .2f", valort) + "   " + String.format("%, .2f", cantidad_umeva) + "    " + String.format("%, .2f", tonelaje));
+                    TableRow encabezadoIni = new TableRow(context);
+                    TableLayout.LayoutParams tableBD = new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 200);
+                    encabezadoIni.setLayoutParams(tableBD);
+                    encabezadoIni.setPadding(10,10,10,10);
+                    TextView textViewAlm = new TextView(context);
+                    textViewAlm.setText("");
+                    textViewAlm.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    textViewAlm.setTextColor(Color.BLACK);
+                    textViewAlm.setWidth(100);
+                    textViewAlm.setHeight(70);
+                    encabezadoIni.addView(textViewAlm);
+
+                    TextView textViewIIDAlm = new TextView(context);
+                    textViewIIDAlm.setText(String.format("%, .2f",valort));
+                    textViewIIDAlm.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    textViewIIDAlm.setTextColor(Color.BLACK);
+                    textViewIIDAlm.setWidth(100);
+                    textViewIIDAlm.setHeight(70);
+                    encabezadoIni.addView(textViewIIDAlm);
+
+                    TextView textNombreAlmacen = new TextView(context);
+                    textNombreAlmacen.setText(String.format("%, .2f",cantidad_umeva));
+                    textNombreAlmacen.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    textNombreAlmacen.setTextColor(Color.BLACK);
+                    textNombreAlmacen.setWidth(100);
+                    textNombreAlmacen.setHeight(70);
+                    encabezadoIni.addView(textNombreAlmacen);
+
+                    TextView txtTipo = new TextView(context);
+                    txtTipo.setText("");
+                    txtTipo.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    txtTipo.setTextColor(Color.BLACK);
+                    txtTipo.setWidth(100);
+                    txtTipo.setHeight(70);
+                    encabezadoIni.addView(txtTipo);
+
+                    TextView txtTipUMo = new TextView(context);
+                    txtTipUMo.setText("");
+                    txtTipUMo.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    txtTipUMo.setTextColor(Color.BLACK);
+                    txtTipUMo.setWidth(100);
+                    txtTipUMo.setHeight(70);
+                    encabezadoIni.addView(txtTipUMo);
+
+                    TextView txtTipUMo1 = new TextView(context);
+                    txtTipUMo1.setText("");
+                    txtTipUMo1.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    txtTipUMo1.setTextColor(Color.BLACK);
+                    txtTipUMo1.setWidth(100);
+                    txtTipUMo1.setHeight(70);
+                    encabezadoIni.addView(txtTipUMo1);
+
+                    TextView tone = new TextView(context);
+                    tone.setText(String.format("%, .2f",tonelaje));
+                    tone.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+                    tone.setTextColor(Color.BLACK);
+                    tone.setWidth(100);
+                    tone.setHeight(70);
+                    encabezadoIni.addView(tone);
+
+                    encabezadoIni.setBackgroundResource(R.drawable.shape_table_total);
+                    certDesglozadaHolder.tableLayoutCerDesg.addView(encabezadoIni);
+                }
+
             }
+            return;
         }else {
             Log.e("I es menor que 1 " , "CUIDADO ");
+            return;
         }
     }
 
     @Override
     public int getItemCount() {
-        return certificacionNormals.size();
+        return 1;
     }
 
     @Override
@@ -210,13 +445,10 @@ public class CertDesglozadaAdapter extends RecyclerView.Adapter<CertDesglozadaAd
 
     public class CertDesglozadaHolder extends RecyclerView.ViewHolder {
         TableLayout tableLayoutCerDesg;
-        TableRow filasEncabezado;
-        TableRow.LayoutParams layoutParamsCertDesg = new TableRow.LayoutParams(500, 500);
 
         public CertDesglozadaHolder(View fragmentCert) {
             super(fragmentCert);
             tableLayoutCerDesg = fragmentCert.findViewById(R.id.tableLayoutPackingList);
-
             tableLayoutCerDesg.removeAllViews();
 
         }

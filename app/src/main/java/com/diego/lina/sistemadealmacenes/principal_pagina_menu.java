@@ -91,7 +91,7 @@ public class principal_pagina_menu extends AppCompatActivity
         SharedPreferences preferences = principal_pagina_menu.this.getSharedPreferences("as_usr_nombre", Context.MODE_PRIVATE);
         String as_usr_nombre = preferences.getString("as_nombre", "No Cliente");
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.contenedor, new ImportFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.contenedor, new Principal_Inicio()).commit();
 
         nombre.setText(as_usr_nombre);
 
@@ -266,7 +266,14 @@ public class principal_pagina_menu extends AppCompatActivity
                     transaction.addToBackStack(null);
                     transaction.replace(R.id.contenedor, certificacion_reporte_desg);
                     transaction.commit();
-                } else if (listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Condensado")){
+                }else if (listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Rep. de Certificación desglosada")){
+                    Certificacion_Reporte_Dezglozada certificacion_reporte_dezglozada = new Certificacion_Reporte_Dezglozada();
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    transaction.addToBackStack(null);
+                    transaction.replace(R.id.contenedor, certificacion_reporte_dezglozada);
+                    transaction.commit();
+                }else if (listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Condensado")){
                     InventarioFisico_Reporte inventarioFisico_reporte = new InventarioFisico_Reporte();
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                     transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
@@ -294,7 +301,7 @@ public class principal_pagina_menu extends AppCompatActivity
 
         // Adding child data
         listDataHeader.add("Vehiculos");
-        listDataHeader.add("Inventarios");
+        //listDataHeader.add("Inventarios");
         listDataHeader.add("Certificados");
         /*listDataHeader.add("Comercio Exterior");
         listDataHeader.add("Facturación");*/
@@ -307,14 +314,14 @@ public class principal_pagina_menu extends AppCompatActivity
         vehiculo.add("Programados");
         vehiculo.add("Historico");
 
-        List<String> top = new ArrayList<String>();
-        /*top.add("CD por producto");
+        /*List<String> top = new ArrayList<String>();
+        top.add("CD por producto");
         top.add("Producto c/valor");
         top.add("Producto c/valor lote serie");
         top.add("Producto UME");
-        top.add("Producto UME y UMC");*/
+        top.add("Producto UME y UMC");
         top.add("Condensado");
-        top.add("Condensado completo");
+        top.add("Condensado completo");*/
         /*top.add("Detallado");
         top.add("Detallado completo");
         top.add("Productos por cd");
@@ -334,11 +341,11 @@ public class principal_pagina_menu extends AppCompatActivity
         List<String> salir = new ArrayList<String>();
 
         listDataChild.put(listDataHeader.get(0), vehiculo); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), top);
-        listDataChild.put(listDataHeader.get(2), mid);
+        //listDataChild.put(listDataHeader.get(1), top);
+        listDataChild.put(listDataHeader.get(1), mid);
         /*listDataChild.put(listDataHeader.get(3), bottom);
         listDataChild.put(listDataHeader.get(4), facturacion);*/
-        listDataChild.put(listDataHeader.get(3), salir);
+        listDataChild.put(listDataHeader.get(2), salir);
     }
 
     public int GetPixelFromDips(float pixels) {

@@ -51,8 +51,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class Certificacion_reporte_desg extends Fragment {
     /*Recycler*/
@@ -148,6 +151,9 @@ public class Certificacion_reporte_desg extends Fragment {
 
 
         rg_todos = fragment.findViewById(R.id.rg_Todos);
+
+        ((RadioButton) rg_todos.getChildAt(0)).setChecked(true);
+
         rg_N = fragment.findViewById(R.id.groupRbN);
         rg_S = fragment.findViewById(R.id.groupRbS);
         //Radio group todos
@@ -256,6 +262,12 @@ public class Certificacion_reporte_desg extends Fragment {
         });
         btn_fec_ini = fragment.findViewById(R.id.btn_ini);
         fecha_1 = fragment.findViewById(R.id.fecha_inicial);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY", Locale.getDefault());
+        Date date = new Date();
+        String fecha_inicial = dateFormat.format(date);
+        fecha_1.setText(fecha_inicial);
+
         btn_fec_ini.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -288,6 +300,7 @@ public class Certificacion_reporte_desg extends Fragment {
         });
         btn_fec_fin = fragment.findViewById(R.id.btn_fin);
         fecha2 = fragment.findViewById(R.id.fecha_final);
+        fecha2.setText(fecha_inicial);
         btn_fec_fin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
