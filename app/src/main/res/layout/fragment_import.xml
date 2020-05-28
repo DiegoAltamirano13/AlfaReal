@@ -98,7 +98,7 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <Spinner
+        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/spinner_plaza"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -196,7 +196,7 @@
             android:background="@drawable/shape_circle"
             android:src="@drawable/ic_clock_solid"
             android:focusable="true"/>
-            <Spinner
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/spinner_fecha"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -221,7 +221,7 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <Spinner
+        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/spinner_vehiculo"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -231,7 +231,7 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <Spinner
+        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/spinner_marca"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -320,7 +320,7 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <Spinner
+        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/spinner_unidad_medida"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
