@@ -12,7 +12,7 @@ import java.util.Map;
 public class LoginReq extends StringRequest {
 
     //private  static  final  String LOGIN_REQUEST_URL = "http://sistemasdecontrolderiego.esy.es/Login.php";
-    private  static  final  String LOGIN_REQUEST_URL = "http://187.141.70.76/android_app/conexion_Android.php";
+    private  static  final  String LOGIN_REQUEST_URL = "http://187.141.70.75:8181/android_app/conexion_Android.php";
     private Map<String , String>params;
     public  LoginReq(String usr_usuario, String usr_password, Response.Listener<String> listener){
         super(Method.POST, LOGIN_REQUEST_URL, listener, null);
