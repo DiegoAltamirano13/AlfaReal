@@ -443,7 +443,6 @@ public class Certificacion_reporte_desg extends Fragment {
 
                         }else{
                             progressDialog.hide();
-
                         }
                     }
                     final CertDesglozadaAdapter certDesglozadaAdapter = new CertDesglozadaAdapter(certificacionNormalArrayList, getContext());

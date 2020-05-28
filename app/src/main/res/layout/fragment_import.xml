@@ -109,7 +109,7 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <Spinner
+        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/spinner_almacen"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -132,7 +132,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/first_label"
-                android:textAlignment="center"></RadioButton>
+                android:textAlignment="center"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal"></RadioButton>
 
             <RadioButton
                 android:id="@+id/descarga"
@@ -141,7 +143,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/segund_label"
-                android:textAlignment="center"></RadioButton>
+                android:textAlignment="center"
+                android:gravity="center_horizontal"></RadioButton>
 
         </RadioGroup>
     </android.support.design.widget.TextInputLayout>
@@ -172,7 +175,9 @@
                 android:inputType="date"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView"
-                android:focusable="false">
+                android:focusable="false"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal">
 
             </EditText>
         </LinearLayout>
